@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auto Translate</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        async function onSignIn(googleUser) {
+            const res = await fetch("http://localhost:3000/api/user/authenticate", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: googleUser.credential,
+                },
+            });
+            const data = await res.json();
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                const userDataFromToken = atob(data.token.split(".")[1]);
+                const userData = JSON.parse(userDataFromToken);
+                const encodedEmail = encodeURIComponent(userData.email);
+                window.location.href = "./pricing.html?email=" + encodedEmail;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload" data-client_id="235953142971-5bpsqt450g9cmgfnbe3hv6dqaumji9fu.apps.googleusercontent.com"
+        data-callback="onSignIn"></div>
+    <div class="g_id_signin" data-type="standard"></div>
+</body>
+
+</html>
