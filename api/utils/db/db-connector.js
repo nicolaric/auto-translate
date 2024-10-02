@@ -10,10 +10,11 @@ db.exec(`
 `);
 
 db.exec(`
-    CREATE TABLE IF NOT EXISTS api_key (
+    CREATE TABLE IF NOT EXISTS api_token (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user INTEGER NOT NULL,
-        key TEXT NOT NULL,
+        name TEXT NOT NULL,
+        key_hash TEXT NOT NULL,
         created_at DATE NOT NULL,
         FOREIGN KEY(user) REFERENCES user(id)
     );

@@ -10,6 +10,7 @@ const openai = new OpenAI({
 
 export const translateApi = (fastify, _, done) => {
     fastify.post("/", async (request, reply) => {
+        console.log(request);
         try {
             translateRequest.parse(request.body);
         } catch (error) {

@@ -28,7 +28,7 @@ export const paymentApi = (fastify, _, done) => {
             customer: user.stripe_id,
             line_items: [
                 {
-                    price: "price_1Q2b1lGhN3Kqa0Kd3o5vDSZf",
+                    price: "prod_QxPsUlIeTK6HOP",
                     quantity: 1,
                 },
             ],

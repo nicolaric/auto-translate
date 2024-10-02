@@ -2,6 +2,9 @@ import { config } from "../config/config.js";
 import { verifyGoogleToken } from "../utils/auth/auth.js";
 import { getUserByEmail, insertUser } from "../utils/db/user.db.js";
 import jwt from "jsonwebtoken";
+import { randomBytes } from "crypto";
+import { createTokenSchema } from "./user-request.model.js";
+import { insertToken } from "../utils/db/api-token.db.js";
 
 export const userApi = (fastify, _, done) => {
     fastify.get("/authenticate", async (request, reply) => {
@@ -34,6 +37,26 @@ export const userApi = (fastify, _, done) => {
                 .code(500)
                 .send({ error: "Internal Server Error" });
         }
+    });
+
+    fastify.post("api-token", async (request, reqply) => {
+        const user = await verifyInternalToken(request.headers.authorization);
+
+        try {
+            createTokenSchema.parse(request.body);
+        } catch (error) {
+            reply.type("application/json").code(400);
+            return { error: error.errors };
+        }
+
+        const token = randomBytes(32).toString("hex");
+
+        const hashedToken = createHash("SHA256").update(token).digest("hex");
+
+        insertToken(user.id, request.body.name, hashedToken);
+
+        reply.type("application/json").code(200);
+        return { token };
     });
 
     done();
