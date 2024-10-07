@@ -1,10 +1,10 @@
 import { config } from "../config/config.js";
-import { verifyGoogleToken } from "../utils/auth/auth.js";
+import { verifyGoogleToken, verifyInternalToken } from "../utils/auth/auth.js";
 import { getUserByEmail, insertUser } from "../utils/db/user.db.js";
 import jwt from "jsonwebtoken";
-import { randomBytes } from "crypto";
+import { randomBytes, createHash } from "crypto";
 import { createTokenSchema } from "./user-request.model.js";
-import { insertToken } from "../utils/db/api-token.db.js";
+import { insertToken, getTokens } from "../utils/db/api-token.db.js";
 
 export const userApi = (fastify, _, done) => {
     fastify.get("/authenticate", async (request, reply) => {
@@ -31,7 +31,7 @@ export const userApi = (fastify, _, done) => {
             );
             return { token };
         } catch (error) {
-            console.error(error);
+            console.error("error", error);
             reply
                 .type("application/json")
                 .code(500)
@@ -39,12 +39,13 @@ export const userApi = (fastify, _, done) => {
         }
     });
 
-    fastify.post("api-token", async (request, reqply) => {
+    fastify.post("/api-token", async (request, reply) => {
         const user = await verifyInternalToken(request.headers.authorization);
 
         try {
             createTokenSchema.parse(request.body);
         } catch (error) {
+            console.error(error);
             reply.type("application/json").code(400);
             return { error: error.errors };
         }
@@ -57,6 +58,20 @@ export const userApi = (fastify, _, done) => {
 
         reply.type("application/json").code(200);
         return { token };
+    });
+
+    fastify.get("/api-token", async (request, reply) => {
+        const user = await verifyInternalToken(request.headers.authorization);
+
+        if (!user) {
+            reply.type("application/json").code(401).send({ error: "Unauthorized" });
+            return;
+        }
+
+        const tokens = await getTokens(user.id);
+
+        reply.type("application/json").code(200);
+        return tokens;
     });
 
     done();

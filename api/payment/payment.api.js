@@ -28,8 +28,7 @@ export const paymentApi = (fastify, _, done) => {
             customer: user.stripe_id,
             line_items: [
                 {
-                    price: "prod_QxPsUlIeTK6HOP",
-                    quantity: 1,
+                    price: "price_1Q5XnYGhN3Kqa0KdjKhdYCrF",
                 },
             ],
             success_url: "http://localhost:3001/payment-callback.html",

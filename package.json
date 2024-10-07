@@ -7,11 +7,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "auto-translate": "./script/index.js"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^10.0.1",
     "@stripe/stripe-js": "^4.5.0",
+    "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
     "google-auth-library": "^9.14.1",

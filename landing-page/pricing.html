@@ -1,39 +1,177 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .header {
+        margin-bottom: 2rem;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        color: #007bff;
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        color: #555;
+      }
+
+      .pricing-plans {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .plan {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .plan:hover {
+        transform: translateY(-5px);
+      }
+
+      .plan h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .plan p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 1.5rem;
+      }
+
+      .price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 1rem;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .cta-button:hover {
+        background-color: #0056b3;
+      }
+
+      .footer {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #999;
+      }
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <script>
-        $(document).ready(function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const email = urlParams.get("email");
-            if (!email) {
-                window.location.href = "./index.html";
-                return;
-            }
-            $("#basic-plan").on("click", async () => {
-                const res = await fetch("http://localhost:3000/api/payment/prepare", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const data = await res.json();
-                if (data.url) {
-                    window.location.href = data.url;
-                }
-            });
+      $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get("email");
+        if (!email) {
+          window.location.href = "./index.html";
+          return;
+        }
+        $("#basic-plan").on("click", async () => {
+          const res = await fetch("http://localhost:3000/api/payment/prepare", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+          }
         });
+      });
     </script>
-</head>
+  </head>
 
-<body>
-    <a id="basic-plan" href="#">Basic</a>
-</body>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Choose Your Plan</h1>
+        <p>
+          Select a pricing plan that best suits your app's translation needs.
+        </p>
+      </div>
 
+      <div class="pricing-plans">
+        <!-- Basic Plan -->
+        <div class="plan" id="basic-plan">
+          <h2>Basic Plan</h2>
+          <p>
+            Perfect for small-scale apps looking for reliable and affordable
+            translation services.
+          </p>
+          <div class="price">$1.00/unit</div>
+          <p>
+            Billed monthly. Includes translation for up to 1000 words per unit.
+          </p>
+          <a href="#" class="cta-button">Choose Basic Plan</a>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="plan">
+          <h2>Pro Plan</h2>
+          <p>
+            For larger apps with higher translation demands and additional
+            customization features.
+          </p>
+          <div class="price">$5.00/unit</div>
+          <p>
+            Billed monthly. Includes translation for up to 5000 words per unit
+            with priority support.
+          </p>
+          <a href="#" class="cta-button">Coming Soon</a>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          Need more information?
+          <a href="mailto:support@yourapp.com">Contact our support team</a>.
+        </p>
+      </div>
+    </div>
+  </body>
 </html>

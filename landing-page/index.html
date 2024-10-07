@@ -1,39 +1,128 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Auto Translate</title>
-    <link href="css/style.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="styles/style.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <script>
-        async function onSignIn(googleUser) {
-            const res = await fetch("http://localhost:3000/api/user/authenticate", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: googleUser.credential,
-                },
-            });
-            const data = await res.json();
-            if (data.token) {
-                localStorage.setItem("token", data.token);
-                const userDataFromToken = atob(data.token.split(".")[1]);
-                const userData = JSON.parse(userDataFromToken);
-                const encodedEmail = encodeURIComponent(userData.email);
-                window.location.href = "./pricing.html?email=" + encodedEmail;
-            }
+      async function onSignIn(googleUser) {
+        const res = await fetch("http://localhost:3000/api/user/authenticate", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: googleUser.credential,
+          },
+        });
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          const userDataFromToken = atob(data.token.split(".")[1]);
+          const userData = JSON.parse(userDataFromToken);
+          const encodedEmail = encodeURIComponent(userData.email);
+          window.location.href = "./pricing.html?email=" + encodedEmail;
         }
+      }
     </script>
-</head>
-
-<body>
+  </head>
+  <body>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <div id="g_id_onload" data-client_id="235953142971-5bpsqt450g9cmgfnbe3hv6dqaumji9fu.apps.googleusercontent.com"
-        data-callback="onSignIn"></div>
-    <div class="g_id_signin" data-type="standard"></div>
-</body>
 
+    <!-- Header Section -->
+    <div class="header">
+      <div class="logo"></div>
+      <div class="name">Auto Translate</div>
+    </div>
+
+    <!-- Title Section -->
+    <div class="title-container">
+      <h1 class="title">
+        Application translations, <br />
+        <span class="highlight">automated with AI</span>
+      </h1>
+      <p class="subtitle">
+        Effortlessly translate your app’s language files into <br />
+        multiple languages with ease.
+      </p>
+    </div>
+
+    <!-- Google Sign-In Button -->
+    <div class="google-sign-in">
+      <div
+        id="g_id_onload"
+        data-client_id="235953142971-5bpsqt450g9cmgfnbe3hv6dqaumji9fu.apps.googleusercontent.com"
+        data-callback="onSignIn"
+      ></div>
+      <div class="g_id_signin" data-type="standard"></div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-container">
+      <div class="feature">
+        <div class="icon"></div>
+        <div class="title">Automatic Translation</div>
+        <div class="description">
+          Simplifies the entire translation process for your app.
+        </div>
+      </div>
+      <div class="feature">
+        <div class="icon"></div>
+        <div class="title">Multi-language Support</div>
+        <div class="description">Supports over 30 languages worldwide.</div>
+      </div>
+      <div class="feature">
+        <div class="icon"></div>
+        <div class="title">Seamless Merging</div>
+        <div class="description">
+          Easily merge translated files into your project.
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works">
+      <h2 class="title">How It Works</h2>
+      <p class="description">
+        Follow these four simple steps to translate your app effortlessly.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="icon-upload"></div>
+          <h3>Step 1: Upload your base translation file</h3>
+          <p>
+            Choose the base language file from your app and upload it to begin.
+          </p>
+        </div>
+        <div class="step">
+          <div class="icon-languages"></div>
+          <h3>Step 2: Select your target languages</h3>
+          <p>Pick the languages you'd like to translate your app into.</p>
+        </div>
+        <div class="step">
+          <div class="icon-run"></div>
+          <h3>Step 3: Run the translation script</h3>
+          <p>
+            Let AI automatically translate your content into the selected
+            languages.
+          </p>
+        </div>
+        <div class="step">
+          <div class="icon-review"></div>
+          <h3>Step 4: Review and merge changes</h3>
+          <p>
+            Review translations and merge them into your app for a seamless
+            integration.
+          </p>
+        </div>
+      </div>
+      <div class="cta">
+        <a href="#" class="cta-button">Start Translating Now</a>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,0 +1,249 @@
+/* Fonts */
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/Geist/webfonts/Geist-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/Geist/webfonts/Geist-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/Geist/webfonts/Geist-Black.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+}
+
+/* General Styles */
+body {
+  font-family: "Geist", sans-serif;
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.header .logo {
+  background: url("../assets/images/logo.png") no-repeat;
+  background-size: contain;
+  height: 40px;
+  width: 40px;
+  margin-right: 0.5rem;
+}
+
+.header .name {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Title Section */
+.title-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.title-container .title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.title-container .highlight {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.title-container .subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Google Sign-In */
+.google-sign-in {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+/* Features */
+.features-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+.feature {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+}
+
+.feature .icon {
+  background-color: #f0f0f0;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin: 0 auto 1rem auto;
+}
+
+.feature .title {
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.feature .description {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* How It Works */
+/* How It Works Section */
+
+.how-it-works {
+  margin-top: 3rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.how-it-works .title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.how-it-works .description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Step Container */
+.step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+}
+
+.step .icon-upload,
+.step .icon-languages,
+.step .icon-run,
+.step .icon-review {
+  width: 3rem;
+  height: 3rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+/* Example Icons - Replace with actual icon images */
+.icon-upload {
+  background: url("../assets/icons/upload-icon.png") no-repeat center center;
+}
+.icon-languages {
+  background: url("../assets/icons/language-icon.png") no-repeat center center;
+}
+.icon-run {
+  background: url("../assets/icons/run-icon.png") no-repeat center center;
+}
+.icon-review {
+  background: url("../assets/icons/review-icon.png") no-repeat center center;
+}
+
+/* Step Titles */
+.step h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+}
+
+/* Step Descriptions */
+.step p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* CTA Button */
+.cta {
+  margin-top: 2rem;
+}
+
+.cta-button {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: #007bff; /* Glowing blue accent color */
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+}
+
+.cta-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* Responsive layout */
+@media (min-width: 768px) {
+  .steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .step {
+    width: 45%;
+    text-align: left;
+  }
+}
