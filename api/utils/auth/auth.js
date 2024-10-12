@@ -2,7 +2,10 @@ import { OAuth2Client } from "google-auth-library";
 import { config } from "../../config/config.js";
 import jwt from "jsonwebtoken";
 import { getUser } from "../db/user.db.js";
-import { getTokenByHashedToken } from "../db/api-token.db.js";
+import {
+    getTokenByHashedToken,
+    updateTokenLastUsed,
+} from "../db/api-token.db.js";
 import { createHash } from "crypto";
 
 const client = new OAuth2Client();
@@ -40,11 +43,17 @@ export async function verifyInternalToken(token) {
 export async function verifyApiToken(token) {
     if (!token) return false;
 
+    token = token.replace("sk-", "");
+
+    console.log(token);
+
     const hashedToken = createHash("SHA256").update(token).digest("hex");
 
-    const dbTokens = await getTokenByHashedToken(hashedToken);
+    const dbToken = await getTokenByHashedToken(hashedToken);
 
-    if (!dbTokens) return false;
+    if (!dbToken) return false;
 
-    return dbTokens;
+    updateTokenLastUsed(dbToken.id);
+
+    return dbToken;
 }

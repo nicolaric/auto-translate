@@ -16,6 +16,7 @@ db.exec(`
         name TEXT NOT NULL,
         key_hash TEXT NOT NULL,
         created_at DATE NOT NULL,
+        last_used_at DATE,
         FOREIGN KEY(user) REFERENCES user(id)
     );
 `);

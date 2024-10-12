@@ -58,10 +58,14 @@ export const userApi = (fastify, _, done) => {
 
         const hashedToken = createHash("SHA256").update(token).digest("hex");
 
-        insertToken(user.id, request.body.name, hashedToken);
+        const savedToken = await insertToken(
+            user.id,
+            request.body.name,
+            hashedToken,
+        );
 
         reply.type("application/json").code(200);
-        return { token };
+        return { ...savedToken, token: `sk-${token}` };
     });
 
     fastify.get("/api-token", async (request, reply) => {
