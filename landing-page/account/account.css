@@ -1,0 +1,188 @@
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+.tabs-container {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 1rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: rgb(110, 110, 128);
+}
+
+.tab.active {
+  color: black;
+  border-bottom: 1px solid black;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* New styles for the API keys table */
+#api-keys-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+#api-keys-table th {
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: rgb(110, 110, 128);
+  padding: 0.5rem 0;
+}
+
+#api-keys-table tbody tr {
+  border-top: 1px solid #ddd;
+}
+
+#api-keys-table .action-cell {
+  text-align: right;
+}
+
+#api-keys-table .delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #dc3545;
+}
+
+#api-keys-table td {
+  padding: 1rem 0;
+}
+.create-button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.create-button:hover {
+  background-color: rgb(56, 56, 56);
+}
+
+/* Styles for the dialog to overlay the whole application */
+dialog {
+  opacity: 0;
+  transform: scaleY(0);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0.6rem;
+}
+
+dialog[open] {
+  opacity: 1;
+  transform: scaleY(1) translate(-50%, -50%);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog .dialog-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+dialog .dialog-body {
+  margin-bottom: 1rem;
+}
+
+dialog .form-container {
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-width: 24rem;
+}
+
+dialog .form-container label {
+  padding-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+dialog .form-container input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+dialog .form-container input:focus {
+  border-color: #000;
+  outline: none;
+}
+
+dialog .form-container .button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background-color: rgb(56, 56, 56);
+}
+
+.cancel-button {
+  background-color: rgb(110, 110, 128);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}
+
+.cancel-button:hover {
+  background-color: rgb(90, 90, 90);
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}

@@ -3,6 +3,7 @@ import { config } from "../../config/config.js";
 import jwt from "jsonwebtoken";
 import { getUser } from "../db/user.db.js";
 import { getTokenByHashedToken } from "../db/api-token.db.js";
+import { createHash } from "crypto";
 
 const client = new OAuth2Client();
 
@@ -37,11 +38,13 @@ export async function verifyInternalToken(token) {
 }
 
 export async function verifyApiToken(token) {
+    if (!token) return false;
+
     const hashedToken = createHash("SHA256").update(token).digest("hex");
 
-    const dbTokens = getTokenByHashedToken(hashedToken);
+    const dbTokens = await getTokenByHashedToken(hashedToken);
 
-    if (!dbTokens.length) return false;
+    if (!dbTokens) return false;
 
-    return dbTokens[0];
+    return dbTokens;
 }

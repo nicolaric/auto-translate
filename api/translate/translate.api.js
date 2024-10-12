@@ -2,6 +2,11 @@ import { translateRequest } from "../models/translate-request.js";
 import { compareJSON, mergeJSON } from "../utils/compareJson/compareJson.js";
 import OpenAI from "openai";
 import { config } from "../config/config.js";
+import { verifyApiToken } from "../utils/auth/auth.js";
+import Stripe from "stripe";
+import { getUser } from "../utils/db/user.db.js";
+
+const stripe = new Stripe(config("STRIPE_KEY"));
 
 const openai = new OpenAI({
     apiKey: config("OPENAI_KEY"),
@@ -10,7 +15,18 @@ const openai = new OpenAI({
 
 export const translateApi = (fastify, _, done) => {
     fastify.post("/", async (request, reply) => {
-        console.log(request);
+        const tokenObject = await verifyApiToken(request.headers["api-token"]);
+        const user = getUser(tokenObject.user);
+        const subscription = (
+            await stripe.subscriptions.list({
+                customer: user.stripe_id,
+                status: "active",
+                limit: 10,
+            })
+        ).data[0];
+
+        console.log(subscription);
+
         try {
             translateRequest.parse(request.body);
         } catch (error) {
@@ -54,6 +70,15 @@ export const translateApi = (fastify, _, done) => {
             } else {
                 targetFile = completion.choices[0].message.content;
             }
+            console.log(subscription.items.data);
+
+            await stripe.billing.meterEvents.create({
+                event_name: "api_requests",
+                payload: {
+                    value: 1,
+                    stripe_customer_id: user.stripe_id,
+                },
+            });
 
             reply.type("application/json").code(200);
             return {

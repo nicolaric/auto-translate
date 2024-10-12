@@ -20,12 +20,11 @@ export function incrementUsedQuantity(subscriptionId) {
 }
 
 export function getSubscription(subscriptionId) {
-    return executeQuery(
-        "SELECT * FROM subscription WHERE id = ?",
+    return executeQuery("SELECT * FROM subscription WHERE id = ?", [
         subscriptionId,
-    );
+    ]);
 }
 
-export function getSubscriptionsFromUser(userId) {
-    return executeQuery("SELECT * FROM subscription WHERE user = ?", userId);
+export function getSubscriptionFromUser(userId) {
+    return executeQuery("SELECT * FROM subscription WHERE user = ?", [userId]);
 }

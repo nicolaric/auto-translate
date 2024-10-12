@@ -29,11 +29,15 @@ db.exec(`
         end_date DATE,
         used_quantity INTEGER NOT NULL,
         FOREIGN KEY(user) REFERENCES user(id)
-    );
+);
 `);
 
 export function executeQuery(query, values) {
     return db.prepare(query).get(...values);
+}
+
+export function executeQueryAll(query, values) {
+    return db.prepare(query).all(...values);
 }
 
 export function executeTransaction(query, values) {
