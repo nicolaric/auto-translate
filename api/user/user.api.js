@@ -4,7 +4,11 @@ import { getUserByEmail, insertUser } from "../utils/db/user.db.js";
 import jwt from "jsonwebtoken";
 import { randomBytes, createHash } from "crypto";
 import { createTokenSchema } from "./user-request.model.js";
-import { insertToken, getTokens } from "../utils/db/api-token.db.js";
+import {
+    insertToken,
+    getTokens,
+    deleteToken,
+} from "../utils/db/api-token.db.js";
 
 export const userApi = (fastify, _, done) => {
     fastify.get("/authenticate", async (request, reply) => {
@@ -72,6 +76,19 @@ export const userApi = (fastify, _, done) => {
 
         reply.type("application/json").code(200);
         return tokens;
+    });
+
+    fastify.delete("/api-token/:id", async (request, reply) => {
+        const user = await verifyInternalToken(request.headers.authorization);
+
+        if (!user) {
+            reply.type("application/json").code(401).send({ error: "Unauthorized" });
+            return;
+        }
+
+        await deleteToken(request.params.id);
+
+        reply.type("application/json").code(200);
     });
 
     done();

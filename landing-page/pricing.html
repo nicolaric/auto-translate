@@ -4,15 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
+    <link href="./styles/style.css" rel="stylesheet" />
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-        color: #333;
-      }
-
       .container {
         width: 80%;
         margin: 0 auto;
@@ -20,16 +13,16 @@
         text-align: center;
       }
 
-      .header {
+      .title {
         margin-bottom: 2rem;
       }
 
-      .header h1 {
+      .title h1 {
         font-size: 2.5rem;
         color: #007bff;
       }
 
-      .header p {
+      .title p {
         font-size: 1.2rem;
         color: #555;
       }
@@ -102,13 +95,28 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      $(document).ready(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const email = urlParams.get("email");
-        if (!email) {
-          window.location.href = "./index.html";
-          return;
+      $(document).ready(async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "/index.html";
         }
+
+        const activePlanResponse = await fetch(
+          "http://localhost:3000/api/payment/status",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        const activePlanData = await activePlanResponse.json();
+        if (activePlanData.data.length > 0) {
+          window.location.href = "/account.html";
+        }
+
         $("#basic-plan").on("click", async () => {
           const res = await fetch("http://localhost:3000/api/payment/prepare", {
             method: "GET",
@@ -127,8 +135,16 @@
   </head>
 
   <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a href="/index.html" class="logo-container">
+        <div class="logo"></div>
+        <div class="name">Auto Translate</div>
+      </a>
+      <div class="menu"></div>
+    </div>
     <div class="container">
-      <div class="header">
+      <div class="title">
         <h1>Choose Your Plan</h1>
         <p>
           Select a pricing plan that best suits your app's translation needs.
@@ -140,36 +156,22 @@
         <div class="plan" id="basic-plan">
           <h2>Basic Plan</h2>
           <p>
-            Perfect for small-scale apps looking for reliable and affordable
-            translation services.
+            Perfect for apps looking for reliable and affordable translation
+            services.
           </p>
-          <div class="price">$1.00/unit</div>
+          <div class="price">$1.00/1000 words</div>
           <p>
             Billed monthly. Includes translation for up to 1000 words per unit.
           </p>
           <a href="#" class="cta-button">Choose Basic Plan</a>
         </div>
-
-        <!-- Pro Plan -->
-        <div class="plan">
-          <h2>Pro Plan</h2>
-          <p>
-            For larger apps with higher translation demands and additional
-            customization features.
-          </p>
-          <div class="price">$5.00/unit</div>
-          <p>
-            Billed monthly. Includes translation for up to 5000 words per unit
-            with priority support.
-          </p>
-          <a href="#" class="cta-button">Coming Soon</a>
-        </div>
       </div>
-
       <div class="footer">
         <p>
           Need more information?
-          <a href="mailto:support@yourapp.com">Contact our support team</a>.
+          <a href="mailto:support@auto-translate.com"
+            >Contact our support team</a
+          >.
         </p>
       </div>
     </div>

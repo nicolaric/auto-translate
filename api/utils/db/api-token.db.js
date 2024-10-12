@@ -23,3 +23,7 @@ export function getTokenByHashedToken(keyHash) {
 export function getTokens(userId) {
     return executeQueryAll("SELECT * FROM api_token WHERE user = ?", [userId]);
 }
+
+export function deleteToken(id) {
+    return executeTransaction("DELETE FROM api_token WHERE id = ?", [id]);
+}

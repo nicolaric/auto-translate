@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account - API Keys</title>
+    <link href="../styles/style.css" rel="stylesheet" />
+    <link href="./account.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="account.js"></script>
+  </head>
+
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a href="#" class="logo-container">
+        <div class="logo"></div>
+        <div class="name">Auto Translate</div>
+      </a>
+      <div class="menu"></div>
+    </div>
+
+    <div class="container">
+      <div class="header">
+        <div class="title">Your Account</div>
+      </div>
+
+      <div class="tabs-container">
+        <div class="tabs-container">
+          <div class="tab active" data-tab="api-keys">API Keys</div>
+          <div class="tab" data-tab="profile">Profile</div>
+          <div class="tab" data-tab="settings">Settings</div>
+        </div>
+      </div>
+
+      <div class="tab-content active" id="api-keys">
+        <button
+          id="create-api-key-button"
+          class="create-button"
+          onclick="prepareKeyCreation()"
+        >
+          + Create new API key
+        </button>
+        <table id="api-keys-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Last Used</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- API keys will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-content" id="profile">
+        <h2>Profile</h2>
+        <p>Profile content goes here...</p>
+      </div>
+
+      <div class="tab-content" id="settings">
+        <h2>Settings</h2>
+        <p>Settings content goes here...</p>
+      </div>
+    </div>
+
+    <dialog id="create-key-dialog">
+      <form>
+        <div class="form-container">
+          <div class="dialog-title">Create New API Key</div>
+          <label for="key-name">Name</label>
+          <input type="text" id="key-name" placeholder="Enter API key name" />
+          <div class="button-container">
+            <button value="cancel" formmethod="dialog" class="cancel-button">
+              Cancel
+            </button>
+            <button
+              class="submit-button"
+              value="default"
+              id="create-key-submit"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="delete-key-dialog">
+      <form>
+        <div class="form-container">
+          <div class="dialog-title">Delete API Key</div>
+          <div class="dialog-body">
+            Are you sure you want to delete this API key?
+          </div>
+          <div class="button-container">
+            <button value="cancel" formmethod="dialog" class="cancel-button">
+              Cancel
+            </button>
+            <button
+              class="delete-button"
+              value="default"
+              id="delete-key-button"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
