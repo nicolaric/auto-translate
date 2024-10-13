@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "safestart-server": "node --experimental-sqlite api/server.js"
+    "safestart-server": "node --experimental-sqlite api/server.js --env-file ./api/config/.env.local"
   },
   "bin": {
     "auto-translate": "./script/index.js"
