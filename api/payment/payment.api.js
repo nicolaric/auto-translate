@@ -65,5 +65,21 @@ export const paymentApi = (fastify, _, done) => {
     return subscription;
   });
 
+  fastify.get("/usage-link", async (request, reply) => {
+    const user = await verifyInternalToken(request.headers.authorization);
+    if (!user || !user.stripe_id) {
+      reply.type("application/json").code(401);
+      return { error: "Unauthorized" };
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: user.stripe_id,
+      return_url: config("STRIPE_RETURN_URL"),
+    });
+
+    reply.type("application/json").code(200);
+    return { url: session.url };
+  });
+
   done();
 };
