@@ -3,7 +3,7 @@ const apiKeys = [];
 async function getKeys() {
     try {
         const keysResponse = await fetch(
-            "http://localhost:3000/api/user/api-token",
+            "https://auto-translate.com/api/user/api-token",
             {
                 method: "GET",
                 headers: {
@@ -23,7 +23,7 @@ async function getKeys() {
 async function createKey(name) {
     try {
         const newKeyResponse = await fetch(
-            "http://localhost:3000/api/user/api-token",
+            "https://auto-translate.com/api/user/api-token",
             {
                 method: "POST",
                 headers: {
@@ -57,7 +57,7 @@ function prepareKeyDeletion(id) {
 
 async function deleteKey(id) {
     try {
-        await fetch(`http://localhost:3000/api/user/api-token/${id}`, {
+        await fetch(`https://auto-translate.com/api/user/api-token/${id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

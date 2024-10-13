@@ -60,7 +60,7 @@ async function translateFile(options) {
 
     console.log("Sending translation request...");
 
-    const translateReq = await fetch("http://localhost:3000/api/translate", {
+    const translateReq = await fetch("https://auto-translate.com/api/translate", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

@@ -12,13 +12,16 @@
     ></script>
     <script>
       async function onSignIn(googleUser) {
-        const res = await fetch("http://localhost:3000/api/user/authenticate", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: googleUser.credential,
+        const res = await fetch(
+          "https://auto-translate.com/api/user/authenticate",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: googleUser.credential,
+            },
           },
-        });
+        );
         const data = await res.json();
         if (data.token) {
           localStorage.setItem("token", data.token);

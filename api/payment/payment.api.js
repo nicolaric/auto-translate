@@ -28,11 +28,11 @@ export const paymentApi = (fastify, _, done) => {
             customer: user.stripe_id,
             line_items: [
                 {
-                    price: "price_1Q5XnYGhN3Kqa0KdjKhdYCrF",
+                    price: config("STRIPE_PRICE"),
                 },
             ],
-            success_url: "http://localhost:3001/payment-callback.html",
-            cancel_url: "https://example.com/cancel",
+            success_url: config("STRIPE_SUCCESS_URL"),
+            cancel_url: config("STRIPE_CANCEL_URL"),
         });
 
         console.log(session);

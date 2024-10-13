@@ -102,7 +102,7 @@
         }
 
         const activePlanResponse = await fetch(
-          "http://localhost:3000/api/payment/status",
+          "https://auto-translate.com/api/payment/status",
           {
             method: "GET",
             headers: {
@@ -118,13 +118,16 @@
         }
 
         $("#basic-plan").on("click", async () => {
-          const res = await fetch("http://localhost:3000/api/payment/prepare", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+          const res = await fetch(
+            "https://auto-translate.com/api/payment/prepare",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
             },
-          });
+          );
           const data = await res.json();
           if (data.url) {
             window.location.href = data.url;
