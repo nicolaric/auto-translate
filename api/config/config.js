@@ -10,5 +10,6 @@ dotenv.config({
 });
 
 export function config(key) {
+    console.log(process.env[key]);
     return process.env[key];
 }
