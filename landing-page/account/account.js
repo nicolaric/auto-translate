@@ -118,7 +118,9 @@ function renderApiKeys() {
           },
         }).then((response) => {
           response.json().then((data) => {
-            console.log(data);
+            $("#usage").html(
+              `<a href="${data.url}" target="_blank">View usage</a>`,
+            );
             window.open(data.url, "_blank");
           });
         });

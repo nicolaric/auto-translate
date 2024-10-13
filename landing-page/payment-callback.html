@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title></title>
+    <title>Payment - Account</title>
     <link href="styles/style.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="./assets/images/logo-small.png" />
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -34,70 +35,6 @@
         }
       });
     </script>
-    <style>
-      .status {
-        width: 100%;
-        text-align: center;
-      }
-
-      .status-icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 7rem;
-        width: 7rem;
-        color: #28a745;
-        border-radius: 50%;
-        margin: 0 auto;
-        margin-top: 5rem;
-      }
-
-      .status-icon .error {
-        background-color: #dc3545;
-      }
-
-      .status-icon svg {
-        height: 50%;
-      }
-
-      .status-text {
-        font-size: 2rem;
-        margin-top: 2rem;
-      }
-
-      #status-success {
-        display: none;
-      }
-
-      #status-success .status-icon {
-        background-color: #50c878;
-      }
-
-      #status-error {
-        display: none;
-      }
-
-      #status-error .status-icon {
-        background-color: #dc3545;
-      }
-
-      #status-loading {
-        display: block;
-      }
-
-      #status-loading .status-icon {
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
   </head>
 
   <body>
