@@ -119,37 +119,6 @@ p {
   margin: 2rem 0;
 }
 
-/* Features */
-.features-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 2rem 0;
-}
-
-.feature {
-  flex: 1;
-  text-align: center;
-  padding: 1rem;
-}
-
-.feature .icon {
-  background-color: #f0f0f0;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  margin: 0 auto 1rem auto;
-}
-
-.feature .title {
-  font-weight: bold;
-  margin: 1rem 0;
-}
-
-.feature .description {
-  font-size: 0.9rem;
-  color: #666;
-}
-
 /* How It Works */
 /* How It Works Section */
 
@@ -182,7 +151,8 @@ p {
 /* Step Container */
 .step {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  lign-items: center;
   gap: 1rem;
   text-align: left;
   background-color: #f9f9f9;
@@ -205,20 +175,6 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   flex-shrink: 0;
-}
-
-/* Example Icons - Replace with actual icon images */
-.icon-upload {
-  background: url("../assets/icons/upload-icon.png") no-repeat center center;
-}
-.icon-languages {
-  background: url("../assets/icons/language-icon.png") no-repeat center center;
-}
-.icon-run {
-  background: url("../assets/icons/run-icon.png") no-repeat center center;
-}
-.icon-review {
-  background: url("../assets/icons/review-icon.png") no-repeat center center;
 }
 
 /* Step Titles */

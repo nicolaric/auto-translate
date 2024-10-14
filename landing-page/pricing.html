@@ -115,7 +115,7 @@
 
         const activePlanData = await activePlanResponse.json();
         if (activePlanData.data.length > 0) {
-          window.location.href = "/account.html";
+          window.location.href = "/account";
         }
 
         $("#basic-plan").on("click", async () => {
