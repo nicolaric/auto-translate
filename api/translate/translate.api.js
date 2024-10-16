@@ -17,22 +17,21 @@ const openai = new OpenAI({
 
 export const translateApi = (fastify, _, done) => {
   fastify.post("/", async (request, reply) => {
-    //const tokenObject = await verifyApiToken(request.headers["api-token"]);
-    //const user = getUser(tokenObject.user);
-    /*const subscription = (
-                                                                                                                                  await stripe.subscriptions.list({
-                                                                                                                                    customer: user.stripe_id,
-                                                                                                                                    status: "active",
-                                                                                                                                    limit: 10,
-                                                                                                                                  })
-                                                                                                                                ).data[0];*/
+    const tokenObject = await verifyApiToken(request.headers["api-token"]);
+    const user = getUser(tokenObject.user);
+    const subscription = (
+      await stripe.subscriptions.list({
+        customer: user.stripe_id,
+        status: "active",
+        limit: 10,
+      })
+    ).data[0];
 
-    /*
-                                                                                                                                    if (!subscription) {
-                                                                                                                                      reply.type("application/json").code(402);
-                                                                                                                                      return { error: "Subscription Required" };
-                                                                                                                                    }
-                                                                                                                                */
+    if (!subscription) {
+      reply.type("application/json").code(402);
+      return { error: "Subscription Required" };
+    }
+
     try {
       translateRequest.parse(request.body);
     } catch (error) {
@@ -92,13 +91,13 @@ export const translateApi = (fastify, _, done) => {
 
     const translatedWords = countValueWords(JSON.parse(sourceFile));
 
-    /*await stripe.billing.meterEvents.create({
-                                                                                                                      event_name: "translated_words",
-                                                                                                                      payload: {
-                                                                                                                        value: translatedWords,
-                                                                                                                        stripe_customer_id: user.stripe_id,
-                                                                                                                      },
-                                                                                                                    });*/
+    await stripe.billing.meterEvents.create({
+      event_name: "translated_words",
+      payload: {
+        value: translatedWords,
+        stripe_customer_id: user.stripe_id,
+      },
+    });
 
     reply.type("application/json").code(200);
     return {
