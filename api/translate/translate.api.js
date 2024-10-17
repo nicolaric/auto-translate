@@ -16,6 +16,18 @@ const openai = new OpenAI({
 });
 
 export const translateApi = (fastify, _, done) => {
+  fastify.get("/test", async (request, reply) => {
+    function wait(ms) {
+      return new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("timeout succeeded")), ms);
+      });
+    }
+
+    await wait(60000);
+    reply.type("application/json").code(200);
+    reply.send({ message: "Hello World" });
+  });
+
   fastify.post("/", async (request, reply) => {
     const tokenObject = await verifyApiToken(request.headers["api-token"]);
     const user = getUser(tokenObject.user);
