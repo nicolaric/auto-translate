@@ -23,7 +23,7 @@ export const translateApi = (fastify, _, done) => {
       });
     }
 
-    await wait(150000);
+    await wait(1000 * 60 * 5);
     reply.type("application/json").code(200);
     reply.send({ message: "Hello World" });
   });
