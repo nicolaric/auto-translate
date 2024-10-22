@@ -37,7 +37,9 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
           parsedObj[key],
         ),
       );
+      console.log("currentChunkedJsonObject", currentChunkedJsonObject);
       chunkedJsonLength += keyObjectLength;
+      console.log("chunkedJsonLength", chunkedJsonLength);
       return;
     }
 
