@@ -3,13 +3,9 @@ import { mergeJSON } from "./compareJson.js";
 export function chunkJson(jsonObj, chunkSize, prefix = "") {
   const objLength = jsonObj.length;
 
-  console.log(objLength);
-
   if (objLength <= chunkSize) {
     return [jsonObj];
   }
-
-  console.log(jsonObj);
 
   const parsedObj = JSON.parse(jsonObj);
 
@@ -62,6 +58,8 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
         `${prefix}${prefix ? "." : ""}${key}`,
       ),
     ];
+
+    console.log(chunkedJsonObjects);
   });
 
   return chunkedJsonObjects;
@@ -87,49 +85,3 @@ function transformKeyToNestedObject(key, value) {
 
   return result;
 }
-
-/*
- * {
- *   "key1": {
- *     "key2": {
- *       "key2.1": "value2.1",
- *       "key2.2": "value2.2",
- *       "key2.3": "value2.3",
- *       "key2.4": "value2.4",
- *       "key2.5": "value2.5",
- *     },
- *     "key3": {
- *       "key3.1": "value3.1",
- *       "key3.2": "value3.2",
- *       "key3.3": "value3.3",
- *       "key3.4": "value3.4",
- *       "key3.5": "value3.5",
- *     }
- *     "key4": {
- *       "key4.1": "value4.1",
- *     }
- *   }
- * }
- *
- * [{
- *   "key1.key2": {
- *      "key2.1": "value2.1",
- *      "key2.2": "value2.2",
- *      "key2.3": "value2.3",
- *      "key2.4": "value2.4",
- *      "key2.5": "value2.5",
- *   },
- *   "key1.key3": {
- *      "key3.1": "value3.1",
- *      "key3.2": "value3.2",
- *      "key3.3": "value3.3",
- *      "key3.4": "value3.4",
- *      "key3.5": "value3.5",
- * }, {
- *  "key1.key4": {
- *    "key4.1": "value4.1",
- *  }
- * }]
- *
- *
- * */
