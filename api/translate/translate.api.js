@@ -61,6 +61,7 @@ export const translateApi = (fastify, _, done) => {
         JSON.stringify(
           compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
         ) || "{}";
+      console.log("missingKeyAndValues", missingKeysAndValues);
     }
 
     const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
@@ -87,7 +88,6 @@ export const translateApi = (fastify, _, done) => {
     if (targetFile) {
       const targetJSON = JSON.parse(targetFile);
       const translatedJSON = Object.assign({}, ...completions);
-      console.log("translatedJSON", translatedJSON);
       targetFile = JSON.stringify(mergeJSON(targetJSON, translatedJSON));
     } else {
       targetFile = JSON.stringify(Object.assign({}, ...completions));
