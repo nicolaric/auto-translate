@@ -50,6 +50,8 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
       return;
     }
 
+    console.log("key", key);
+
     chunkedJsonObjects = [
       ...chunkedJsonObjects,
       ...chunkJson(
