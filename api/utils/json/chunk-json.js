@@ -3,10 +3,13 @@ import { mergeJSON } from "./compareJson.js";
 export function chunkJson(jsonObj, chunkSize, prefix = "") {
   const objLength = jsonObj.length;
 
+  console.log(1);
+
   if (objLength <= chunkSize) {
     return [jsonObj];
   }
 
+  console.log(2);
   const parsedObj = JSON.parse(jsonObj);
 
   const keys = Object.keys(parsedObj);
@@ -16,6 +19,7 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
 
   let chunkedJsonObjects = [];
 
+  console.log(3);
   // TODO: handle last case
   keys.forEach((key) => {
     const keyObjectLength = JSON.stringify(parsedObj[key]).length;
@@ -32,11 +36,13 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
       return;
     }
 
+    console.log(4);
     if (chunkedJsonLength > 0) {
       chunkedJsonObjects.push(JSON.stringify(currentChunkedJsonObject));
       currentChunkedJsonObject = {};
       chunkedJsonLength = 0;
     }
+    console.log(5);
 
     if (keyObjectLength < chunkSize) {
       currentChunkedJsonObject = mergeJSON(
@@ -50,6 +56,7 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
       return;
     }
 
+    console.log(6);
     console.log("key", key);
 
     chunkedJsonObjects = [
@@ -62,6 +69,7 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
     ];
   });
 
+  console.log(7);
   return chunkedJsonObjects;
 }
 

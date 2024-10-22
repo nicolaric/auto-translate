@@ -65,7 +65,15 @@ export const translateApi = (fastify, _, done) => {
 
     console.log("missingKeysAndValues", missingKeysAndValues);
 
-    const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
+    let chunkedSources;
+
+    try {
+      chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
+    } catch (error) {
+      console.error(`Error chunking JSON: ${error}`);
+      reply.type("application/json").code(400);
+      return { error: error };
+    }
 
     console.log("chunkedSources", chunkedSources);
 
