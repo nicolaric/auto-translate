@@ -25,7 +25,9 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
   console.log(3);
   // TODO: handle last case
   keys.forEach((key) => {
+    console.log("key", key);
     const keyObjectLength = JSON.stringify(parsedObj[key]).length;
+    console.log("keyObjectLength", keyObjectLength);
 
     if (chunkedJsonLength + keyObjectLength <= chunkSize) {
       currentChunkedJsonObject = mergeJSON(
