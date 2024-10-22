@@ -58,15 +58,12 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
         `${prefix}${prefix ? "." : ""}${key}`,
       ),
     ];
-
-    console.log("chunkedJsonObjects", chunkedJsonObjects);
   });
 
   return chunkedJsonObjects;
 }
 
 function transformKeyToNestedObject(key, value) {
-  console.log(key);
   if (!key) return value;
 
   const keys = key.split(".");

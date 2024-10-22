@@ -3,57 +3,55 @@ import { config } from "../../config/config.js";
 import jwt from "jsonwebtoken";
 import { getUser } from "../db/user.db.js";
 import {
-    getTokenByHashedToken,
-    updateTokenLastUsed,
+  getTokenByHashedToken,
+  updateTokenLastUsed,
 } from "../db/api-token.db.js";
 import { createHash } from "crypto";
 
 const client = new OAuth2Client();
 
 export async function verifyGoogleToken(token) {
-    try {
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: config("GOOGLE_CLIENT_ID"),
-        });
-        const payload = ticket.getPayload();
-        return payload;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: config("GOOGLE_CLIENT_ID"),
+    });
+    const payload = ticket.getPayload();
+    return payload;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 export async function verifyInternalToken(token) {
-    if (!token) return false;
-    token = token.replace("Bearer ", "");
+  if (!token) return false;
+  token = token.replace("Bearer ", "");
 
-    return jwt.verify(token, config("JWT_SIGNING_KEY"), (err, decoded) => {
-        if (err) {
-            return false;
-        }
-        const user = getUser(decoded.id);
-        if (!user) {
-            return false;
-        }
-        return user;
-    });
+  return jwt.verify(token, config("JWT_SIGNING_KEY"), (err, decoded) => {
+    if (err) {
+      return false;
+    }
+    const user = getUser(decoded.id);
+    if (!user) {
+      return false;
+    }
+    return user;
+  });
 }
 
 export async function verifyApiToken(token) {
-    if (!token) return false;
+  if (!token) return false;
 
-    token = token.replace("sk-", "");
+  token = token.replace("sk-", "");
 
-    console.log(token);
+  const hashedToken = createHash("SHA256").update(token).digest("hex");
 
-    const hashedToken = createHash("SHA256").update(token).digest("hex");
+  const dbToken = await getTokenByHashedToken(hashedToken);
 
-    const dbToken = await getTokenByHashedToken(hashedToken);
+  if (!dbToken) return false;
 
-    if (!dbToken) return false;
+  updateTokenLastUsed(dbToken.id);
 
-    updateTokenLastUsed(dbToken.id);
-
-    return dbToken;
+  return dbToken;
 }

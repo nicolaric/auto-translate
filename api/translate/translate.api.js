@@ -63,7 +63,6 @@ export const translateApi = (fastify, _, done) => {
     }
 
     const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
-    console.log(chunkedSources);
 
     const completions = [];
 
@@ -136,9 +135,6 @@ async function translateChunk(
         },
       ],
     });
-
-    console.log(chunkedSource);
-    console.log(openAiAnswer.choices[0].message.content);
 
     return JSON.parse(openAiAnswer.choices[0].message.content);
   } catch (error) {

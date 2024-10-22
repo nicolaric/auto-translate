@@ -8,6 +8,5 @@ export function countValueWords(obj) {
     }
   }
 
-  console.log(count);
   return count;
 }
