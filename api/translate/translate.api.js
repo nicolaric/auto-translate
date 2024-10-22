@@ -57,9 +57,10 @@ export const translateApi = (fastify, _, done) => {
     let missingKeysAndValues;
 
     if (targetFile) {
-      missingKeysAndValues = JSON.stringify(
-        compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
-      );
+      missingKeysAndValues =
+        JSON.stringify(
+          compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
+        ) || "{}";
     }
 
     const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
