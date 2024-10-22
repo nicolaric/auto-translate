@@ -67,30 +67,22 @@ export const translateApi = (fastify, _, done) => {
 
     const completions = [];
 
-    for (let chunkedSource of chunkedSources) {
-      try {
-        const openAiAnswer = await openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "user",
-              content: `you're a translator and your mandate is to translate translation files for application from the defined source
-                                                  language into the defined target language. please only return the translation file without any additional message or phrasing. Don't return the response in a code block, but just in plain text. 
-                                                  source language: "${sourceLanguage}"
-                                                  target language: "${targetLanguage}"
-                                                  translation file: \`\`\`${chunkedSource}\`\`\``,
-            },
-          ],
-        });
+    // Create an array of promises for all the chunks
+    const translationPromises = chunkedSources.map((chunkedSource) =>
+      translateChunk(chunkedSource, sourceLanguage, targetLanguage, openai),
+    );
 
-        console.log(chunkedSource);
-        console.log(openAiAnswer.choices[0].message.content);
+    // Execute all promises in parallel
+    const results = await Promise.all(translationPromises);
 
-        completions.push(JSON.parse(openAiAnswer.choices[0].message.content));
-      } catch (error) {
-        return { error: error.message };
+    // Process the results (can also handle errors if needed)
+    results.forEach((result) => {
+      if (result.error) {
+        console.error(`Error processing chunk: ${result.error}`);
+      } else {
+        completions.push(result);
       }
-    }
+    });
 
     if (targetFile) {
       const targetJSON = JSON.parse(targetFile);
@@ -119,3 +111,35 @@ export const translateApi = (fastify, _, done) => {
 
   done();
 };
+
+// Function to handle the translation for a single chunk
+async function translateChunk(
+  chunkedSource,
+  sourceLanguage,
+  targetLanguage,
+  openai,
+) {
+  try {
+    const openAiAnswer = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: `you're a translator and your mandate is to translate translation files for application from the defined source
+                    language into the defined target language. please only return the translation file without any additional message or phrasing. 
+                    Don't return the response in a code block, but just in plain text. 
+                    source language: "${sourceLanguage}"
+                    target language: "${targetLanguage}"
+                    translation file: \`\`\`${chunkedSource}\`\`\``,
+        },
+      ],
+    });
+
+    console.log(chunkedSource);
+    console.log(openAiAnswer.choices[0].message.content);
+
+    return JSON.parse(openAiAnswer.choices[0].message.content);
+  } catch (error) {
+    return { error: error.message };
+  }
+}
