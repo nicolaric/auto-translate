@@ -67,6 +67,8 @@ export const translateApi = (fastify, _, done) => {
 
     const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
 
+    console.log("chunkedSources", chunkedSources);
+
     const completions = [];
 
     // Create an array of promises for all the chunks
