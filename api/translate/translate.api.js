@@ -87,15 +87,15 @@ export const translateApi = (fastify, _, done) => {
     if (targetFile) {
       const targetJSON = JSON.parse(targetFile);
       const translatedJSON = Object.assign({}, ...completions);
-      console.log(translatedJSON);
-      console.log(targetJSON);
-
+      console.log("translatedJSON", translatedJSON);
       targetFile = JSON.stringify(mergeJSON(targetJSON, translatedJSON));
     } else {
       targetFile = JSON.stringify(Object.assign({}, ...completions));
     }
 
-    const translatedWords = countValueWords(JSON.parse(sourceFile));
+    const translatedWords = countValueWords(
+      JSON.parse(missingKeysAndValues ?? sourceFile),
+    );
 
     await stripe.billing.meterEvents.create({
       event_name: "translated_words",
