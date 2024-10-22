@@ -59,7 +59,7 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
       ),
     ];
 
-    console.log(chunkedJsonObjects);
+    console.log("chunkedJsonObjects", chunkedJsonObjects);
   });
 
   return chunkedJsonObjects;
