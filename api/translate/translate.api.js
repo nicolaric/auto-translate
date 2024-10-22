@@ -86,7 +86,7 @@ export const translateApi = (fastify, _, done) => {
 
     if (targetFile) {
       const targetJSON = JSON.parse(targetFile);
-      const translatedJSON = Object.assign({}, completions);
+      const translatedJSON = Object.assign({}, ...completions);
 
       targetFile = JSON.stringify(mergeJSON(targetJSON, ...translatedJSON));
     } else {
