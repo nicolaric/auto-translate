@@ -15,6 +15,7 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
   console.log("parsedObj", parsedObj);
 
   const keys = Object.keys(parsedObj);
+  console.log("keys", keys);
 
   let chunkedJsonLength = 0;
   let currentChunkedJsonObject = {};
