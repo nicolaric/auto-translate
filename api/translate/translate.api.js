@@ -62,7 +62,7 @@ export const translateApi = (fastify, _, done) => {
       );
     }
 
-    const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 1000);
+    const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
     console.log(chunkedSources);
 
     const completions = [];
