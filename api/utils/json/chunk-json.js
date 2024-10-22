@@ -22,12 +22,9 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
 
   let chunkedJsonObjects = [];
 
-  console.log(3);
   // TODO: handle last case
   keys.forEach((key) => {
-    console.log("key", key);
     const keyObjectLength = JSON.stringify(parsedObj[key]).length;
-    console.log("keyObjectLength", keyObjectLength);
 
     if (chunkedJsonLength + keyObjectLength <= chunkSize) {
       currentChunkedJsonObject = mergeJSON(
@@ -37,19 +34,15 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
           parsedObj[key],
         ),
       );
-      console.log("currentChunkedJsonObject", currentChunkedJsonObject);
       chunkedJsonLength += keyObjectLength;
-      console.log("chunkedJsonLength", chunkedJsonLength);
       return;
     }
 
-    console.log(4);
     if (chunkedJsonLength > 0) {
       chunkedJsonObjects.push(JSON.stringify(currentChunkedJsonObject));
       currentChunkedJsonObject = {};
       chunkedJsonLength = 0;
     }
-    console.log(5);
 
     if (keyObjectLength < chunkSize) {
       currentChunkedJsonObject = mergeJSON(
@@ -63,9 +56,6 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
       return;
     }
 
-    console.log(6);
-    console.log("key", key);
-
     chunkedJsonObjects = [
       ...chunkedJsonObjects,
       ...chunkJson(
@@ -76,7 +66,10 @@ export function chunkJson(jsonObj, chunkSize, prefix = "") {
     ];
   });
 
-  console.log(7);
+  chunkedJsonObjects = [
+    ...chunkedJsonObjects,
+    JSON.stringify(currentChunkedJsonObject),
+  ];
   return chunkedJsonObjects;
 }
 
