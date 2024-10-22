@@ -57,6 +57,7 @@ export const translateApi = (fastify, _, done) => {
     let missingKeysAndValues;
 
     if (targetFile) {
+      console.log("sourceFile", sourceFile);
       missingKeysAndValues =
         JSON.stringify(
           compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
