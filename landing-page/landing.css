@@ -95,3 +95,150 @@
 .step p {
   text-align: center;
 }
+
+.upcoming-features {
+  max-width: 1200px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+}
+
+.upcoming-features .title {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.upcoming-features .description {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  color: #666;
+}
+
+.feature-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+}
+
+.feature {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  flex: 1 1 30%;
+  max-width: 30%;
+  transition: transform 0.3s;
+  text-align: left;
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status.planned {
+  background-color: #007bff;
+}
+
+.feature h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 1em;
+  color: #666;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .feature-list {
+    flex-direction: column;
+  }
+
+  .feature {
+    max-width: 100%;
+  }
+}
+
+.faq-section {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.faq-section .title {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.faq-section .description {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  color: #666;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faq-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.faq-item:hover {
+  background: #f0f4f8;
+}
+
+.question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.icon-toggle {
+  font-size: 1.5em;
+  color: #4caf50;
+  transition: transform 0.3s;
+}
+
+.answer {
+  display: none;
+  margin-top: 10px;
+  font-size: 1em;
+  color: #666;
+  line-height: 1.6;
+}
+
+.faq-item.active .answer {
+  display: block;
+}
+
+.faq-item.active .icon-toggle {
+  transform: rotate(45deg); /* Changes "+" to an "x" */
+}

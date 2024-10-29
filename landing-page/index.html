@@ -49,6 +49,12 @@
           window.location.href = "./pricing.html?email=" + encodedEmail;
         }
       }
+      $(document).ready(function () {
+        $(".faq-item").each((index) => {
+          const item = $(".faq-item")[index];
+          item.addEventListener("click", () => item.classList.toggle("active"));
+        });
+      });
     </script>
   </head>
   <body>
@@ -324,6 +330,107 @@
           </p>
         </div>
       </div>
+
+      <!-- Upcoming Features Section -->
+      <div class="upcoming-features">
+        <h2 class="title">Upcoming Features</h2>
+        <p class="description">
+          Exciting new updates and features are on the way to enhance your
+          experience.
+        </p>
+        <div class="feature-list">
+          <div class="feature">
+            <div class="status planned"></div>
+            Planned
+            <h3>Direct Gitlab/Github Pipeline integration</h3>
+            <p>
+              No need to write your own pipeline definition files. We can do it
+              for you directly.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="status planned"></div>
+            Planned
+            <h3>Improve translation of edited values</h3>
+            <p>
+              We will not just find new values to translate, but also improve
+              the translation of values that have been edited.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="status planned"></div>
+            Planned
+            <h3>App-specific translations</h3>
+            <p>
+              We understand that every application can have specific
+              translations by it's usage. Add those easily in your account, and
+              we will ensure that we translate those correctly.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-section">
+        <h2 class="title">Frequently Asked Questions</h2>
+        <p class="description">
+          Here are answers to some of the most commonly asked questions.
+        </p>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="question">
+              <h3>What is Auto Translate?</h3>
+              <span class="icon-toggle">+</span>
+            </div>
+            <div class="answer">
+              <p>
+                Auto Translate is a service that helps you translate your app
+                content into multiple languages effortlessly using AI-powered
+                tools.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="question">
+              <h3>How much does it cost?</h3>
+              <span class="icon-toggle">+</span>
+            </div>
+            <div class="answer">
+              <p>
+                Pricing depends on your usage. For every started batch of 1000
+                words you translate, we charge $2.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="question">
+              <h3>My file is only translated partly, what should I do?</h3>
+              <span class="icon-toggle">+</span>
+            </div>
+            <div class="answer">
+              <p>
+                This can happen due to various reasons. Especially on large
+                files. Just run the translation command again, it will only
+                translate the missing parts and you only have to pay them.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="question">
+              <h3>How do I run Auto Translate in my CI/CD pipeline?</h3>
+              <span class="icon-toggle">+</span>
+            </div>
+            <div class="answer">
+              <p>
+                You can use the Auto Translate CLI in your CI/CD pipeline. Just
+                install the NPM package, run the translation command, and create
+                a merge request.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- TODO: Add CTA button -->
       <!--<div class="cta">
         <a href="#" class="cta-button">Start Translating Now</a>
