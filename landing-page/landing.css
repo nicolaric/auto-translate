@@ -75,11 +75,13 @@
 .feature .title {
   font-weight: bold;
   margin: 1rem 0;
+  text-align: center;
 }
 
 .feature .description {
   font-size: 0.9rem;
   color: #666;
+  text-align: center;
 }
 
 .icon {
@@ -179,7 +181,6 @@
   padding: 50px 20px;
   background-color: #f9f9f9;
   border-radius: 15px;
-  text-align: center;
 }
 
 .faq-section .title {
@@ -233,6 +234,21 @@
   font-size: 1em;
   color: #666;
   line-height: 1.6;
+}
+
+.answer pre {
+  background-color: #1e1e1e;
+  text-color
+  padding: 5px;
+  border-radius: 5px;
+  display: block;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: scroll;
+  max-width: 100%;
+  min-width: 100px;
+  padding: 10px;
+  color: white;
 }
 
 .faq-item.active .answer {
