@@ -80,6 +80,21 @@ p {
   font-size: 1.5rem;
   font-weight: 700;
   color: white;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .header .logo-container {
+    width: 100%;
+  }
+
+  .header .logo-container .logo {
+    margin: 0 auto;
+  }
+
+  .header .logo-container .name {
+    display: none;
+  }
 }
 
 .header .menu {
@@ -90,6 +105,12 @@ p {
   height: 3rem;
   align-items: center;
   padding-x: 10px;
+}
+
+@media (max-width: 768px) {
+  .header .menu {
+    display: none;
+  }
 }
 
 .header .menu a {
