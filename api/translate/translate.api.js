@@ -11,133 +11,121 @@ import { chunkJson } from "../utils/json/chunk-json.js";
 const stripe = new Stripe(config("STRIPE_KEY"));
 
 const openai = new OpenAI({
-  apiKey: config("OPENAI_KEY"),
-  project: "proj_vcupWQG2q2cUO2C8Xk5neGdB",
+    apiKey: config("OPENAI_KEY"),
+    project: "proj_vcupWQG2q2cUO2C8Xk5neGdB",
 });
 
 export const translateApi = (fastify, _, done) => {
-  fastify.get("/test", async (request, reply) => {
-    function wait(ms) {
-      return new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("timeout succeeded")), ms);
-      });
-    }
+    fastify.post("/", async (request, reply) => {
+        const tokenObject = await verifyApiToken(request.headers["api-token"]);
+        const user = getUser(tokenObject.user);
+        const subscription = (
+            await stripe.subscriptions.list({
+                customer: user.stripe_id,
+                status: "active",
+                limit: 10,
+            })
+        ).data[0];
 
-    await wait(1000 * 60 * 5);
-    reply.type("application/json").code(200);
-    reply.send({ message: "Hello World" });
-  });
+        if (!subscription) {
+            reply.type("application/json").code(402);
+            return { error: "Subscription Required" };
+        }
 
-  fastify.post("/", async (request, reply) => {
-    const tokenObject = await verifyApiToken(request.headers["api-token"]);
-    const user = getUser(tokenObject.user);
-    const subscription = (
-      await stripe.subscriptions.list({
-        customer: user.stripe_id,
-        status: "active",
-        limit: 10,
-      })
-    ).data[0];
+        try {
+            translateRequest.parse(request.body);
+        } catch (error) {
+            reply.type("application/json").code(400);
+            return { error: error.errors };
+        }
 
-    if (!subscription) {
-      reply.type("application/json").code(402);
-      return { error: "Subscription Required" };
-    }
+        let { sourceLanguage, targetLanguage, sourceFile, targetFile } =
+            request.body;
 
-    try {
-      translateRequest.parse(request.body);
-    } catch (error) {
-      reply.type("application/json").code(400);
-      return { error: error.errors };
-    }
+        let missingKeysAndValues;
 
-    let { sourceLanguage, targetLanguage, sourceFile, targetFile } =
-      request.body;
+        if (targetFile) {
+            missingKeysAndValues =
+                JSON.stringify(
+                    compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
+                ) || "{}";
+        }
 
-    let missingKeysAndValues;
+        const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
 
-    if (targetFile) {
-      missingKeysAndValues =
-        JSON.stringify(
-          compareJSON(JSON.parse(sourceFile), JSON.parse(targetFile)),
-        ) || "{}";
-    }
+        const completions = [];
 
-    const chunkedSources = chunkJson(missingKeysAndValues ?? sourceFile, 2000);
+        // Create an array of promises for all the chunks
+        const translationPromises = chunkedSources.map((chunkedSource) =>
+            translateChunk(chunkedSource, sourceLanguage, targetLanguage, openai),
+        );
 
-    const completions = [];
+        // Execute all promises in parallel
+        const results = await Promise.all(translationPromises);
 
-    // Create an array of promises for all the chunks
-    const translationPromises = chunkedSources.map((chunkedSource) =>
-      translateChunk(chunkedSource, sourceLanguage, targetLanguage, openai),
-    );
+        // Process the results (can also handle errors if needed)
+        results.forEach((result) => {
+            if (result.error) {
+                console.error(`Error processing chunk: ${result.error}`);
+            } else {
+                completions.push(result);
+            }
+        });
 
-    // Execute all promises in parallel
-    const results = await Promise.all(translationPromises);
+        if (targetFile) {
+            const targetJSON = JSON.parse(targetFile);
+            const translatedJSON = Object.assign({}, ...completions);
+            targetFile = JSON.stringify(mergeJSON(targetJSON, translatedJSON));
+        } else {
+            targetFile = JSON.stringify(Object.assign({}, ...completions));
+        }
 
-    // Process the results (can also handle errors if needed)
-    results.forEach((result) => {
-      if (result.error) {
-        console.error(`Error processing chunk: ${result.error}`);
-      } else {
-        completions.push(result);
-      }
+        const translatedWords = countValueWords(
+            JSON.parse(missingKeysAndValues ?? sourceFile),
+        );
+
+        await stripe.billing.meterEvents.create({
+            event_name: "translated_words",
+            payload: {
+                value: translatedWords,
+                stripe_customer_id: user.stripe_id,
+            },
+        });
+
+        reply.type("application/json").code(200);
+        return {
+            translation: targetFile,
+        };
     });
 
-    if (targetFile) {
-      const targetJSON = JSON.parse(targetFile);
-      const translatedJSON = Object.assign({}, ...completions);
-      targetFile = JSON.stringify(mergeJSON(targetJSON, translatedJSON));
-    } else {
-      targetFile = JSON.stringify(Object.assign({}, ...completions));
-    }
-
-    const translatedWords = countValueWords(
-      JSON.parse(missingKeysAndValues ?? sourceFile),
-    );
-
-    await stripe.billing.meterEvents.create({
-      event_name: "translated_words",
-      payload: {
-        value: translatedWords,
-        stripe_customer_id: user.stripe_id,
-      },
-    });
-
-    reply.type("application/json").code(200);
-    return {
-      translation: targetFile,
-    };
-  });
-
-  done();
+    done();
 };
 
 // Function to handle the translation for a single chunk
 async function translateChunk(
-  chunkedSource,
-  sourceLanguage,
-  targetLanguage,
-  openai,
+    chunkedSource,
+    sourceLanguage,
+    targetLanguage,
+    openai,
 ) {
-  try {
-    const openAiAnswer = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: `you're a translator and your mandate is to translate translation files for application from the defined source
+    try {
+        const openAiAnswer = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                {
+                    role: "user",
+                    content: `you're a translator and your mandate is to translate translation files for application from the defined source
                     language into the defined target language. please only return the translation file without any additional message or phrasing. 
                     Don't return the response in a code block, but just in plain text. 
                     source language: "${sourceLanguage}"
                     target language: "${targetLanguage}"
                     translation file: \`\`\`${chunkedSource}\`\`\``,
-        },
-      ],
-    });
+                },
+            ],
+        });
 
-    return JSON.parse(openAiAnswer.choices[0].message.content);
-  } catch (error) {
-    return { error: error.message };
-  }
+        return JSON.parse(openAiAnswer.choices[0].message.content);
+    } catch (error) {
+        return { error: error.message };
+    }
 }
