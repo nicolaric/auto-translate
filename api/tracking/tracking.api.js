@@ -1,4 +1,4 @@
-import { config } from "dotenv";
+import { config } from "../config/config.js";
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 
