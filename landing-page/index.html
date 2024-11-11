@@ -16,7 +16,6 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
-      async
     ></script>
     <script>
       const commandText =
@@ -55,8 +54,9 @@
           window.location.href = "./pricing.html?email=" + encodedEmail;
         }
       }
-      $(document).ready(function () {
+      $("document").ready(function () {
         $(".faq-item").each((index) => {
+          console.log(index);
           const item = $(".faq-item")[index];
           item.addEventListener("click", () => item.classList.toggle("active"));
         });
