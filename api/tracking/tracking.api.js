@@ -1,14 +1,4 @@
-import { config } from "../config/config.js";
-import { TelegramClient } from "telegram";
-import { StringSession } from "telegram/sessions/index.js";
-
-console.log("aaa", config("TELEGRAM_API_ID"));
-
-const telegramClient = new TelegramClient(
-    new StringSession(""),
-    config("TELEGRAM_API_ID"),
-    config("TELEGRAM_API_HASH"),
-);
+import { track } from "../utils/tracking/trackTelegram.js";
 
 export const trackingApi = (fastify, _, done) => {
     fastify.post("/", async (request, reply) => {
@@ -19,9 +9,7 @@ export const trackingApi = (fastify, _, done) => {
         ) {
             const { event, data } = request.body;
 
-            await telegramClient.start();
-
-            telegramClient.sendMessage("me", `Event: ${event}\nData: ${data}`);
+            track(`Event: ${event}, Data: ${data}`);
 
             reply.type("application/json").code(200);
             return { success: true };
