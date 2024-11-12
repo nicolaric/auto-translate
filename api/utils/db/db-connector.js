@@ -23,15 +23,14 @@ db.exec(`
 `);
 
 db.exec(`
-    CREATE TABLE IF NOT EXISTS subscription (
+    CREATE TABLE IF NOT EXISTS free_tier_subscription (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user INTEGER NOT NULL,
-        stripe_plan_id TEXT,
-        start_date DATE NOT NULL,
-        end_date DATE,
-        used_quantity INTEGER NOT NULL,
+        active BOOLEAN NOT NULL,
+        created_at DATE NOT NULL,
+        usage INTEGER NOT NULL, 
         FOREIGN KEY(user) REFERENCES user(id)
-);
+    );
 `);
 
 export function executeQuery(query, values) {
