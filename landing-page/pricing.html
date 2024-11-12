@@ -114,12 +114,11 @@
         );
 
         const activePlanData = await activePlanResponse.json();
-        if (activePlanData.data.length > 0) {
+        if (activePlanData.data?.length > 0) {
           window.location.href = "/account";
         }
 
         $("#free-plan").on("click", async () => {
-          console.log("iin");
           const res = await fetch(
             "https://auto-translate.com/api/payment/free-tier",
             {
