@@ -7,6 +7,10 @@ import { getUser } from "../utils/db/user.db.js";
 import { compareJSON, mergeJSON } from "../utils/json/compareJson.js";
 import { countValueWords } from "../utils/json/count-value-words.js";
 import { chunkJson } from "../utils/json/chunk-json.js";
+import {
+    updateFreeTierSubscriptionActive,
+    updateFreeTierSubscriptionUsage,
+} from "../utils/db/free-tier-subscription.db.js";
 
 const stripe = new Stripe(config("STRIPE_KEY"));
 
@@ -27,9 +31,27 @@ export const translateApi = (fastify, _, done) => {
             })
         ).data[0];
 
+        const freeTier = getFreeTierSubscription(user.id);
+
+        const freeTierActive = freeTier && freeTier.active;
+
         if (!subscription) {
-            reply.type("application/json").code(402);
-            return { error: "Subscription Required" };
+            if (!freeTierActive) {
+                reply.type("application/json").code(402);
+                return { error: "Subscription Required" };
+            }
+            if (freeTier.usage >= 100) {
+                updateFreeTierSubscriptionActive(user.id, false);
+                reply.type("application/json").code(402);
+                return { error: "Free Tier Limit Reached" };
+            }
+            const wordsToTranslate = countValueWords(
+                JSON.parse(request.body.sourceFile),
+            );
+            if (freeTier.usage + wordsToTranslate > 100) {
+                reply.type("application/json").code(402);
+                return { error: "Free Tier Limit Reached" };
+            }
         }
 
         try {
@@ -83,6 +105,13 @@ export const translateApi = (fastify, _, done) => {
         const translatedWords = countValueWords(
             JSON.parse(missingKeysAndValues ?? sourceFile),
         );
+
+        if (freeTierActive) {
+            updateFreeTierSubscriptionUsage(
+                user.id,
+                freeTier.usage + translatedWords,
+            );
+        }
 
         await stripe.billing.meterEvents.create({
             event_name: "translated_words",
