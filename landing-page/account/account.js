@@ -112,7 +112,7 @@ function renderApiKeys() {
     $("#api-keys-table tbody").html(tableContent);
 }
 
-$(document).ready(async function() {
+$("document").ready(async function() {
     const paymentStatus = await fetch(
         "https://auto-translate.com/api/payment/status",
         {
@@ -124,6 +124,7 @@ $(document).ready(async function() {
     );
     const paymentStatusData = await paymentStatus.json();
     inTrial = paymentStatusData.freeTier;
+    console.log("iiin");
 
     $("#create-api-key-button").on("click", prepareKeyCreation);
     $("#create-key-submit").on("click", async (event) => {
@@ -139,6 +140,7 @@ $(document).ready(async function() {
     });
 
     $(".tab").on("click", function() {
+        console.log("clicked");
         const tabId = $(this).data("tab");
         if (tabId === "usage") {
             if (inTrial) {
@@ -147,23 +149,23 @@ $(document).ready(async function() {
                      <br>
                      ${paymentStatusData.usage}/100 words translated.
                      Update to a paid plan to continue using the service here:
-                     <a href="https://auto-translate.com/pricing" target="_blank">View pricing</a>`,
+                     <a href="/pricing.html" target="_blank">View pricing</a>`,
                 );
-                return;
-            }
-            fetch(`https://auto-translate.com/api/payment/usage-link`, {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            }).then((response) => {
-                response.json().then((data) => {
-                    $("#usage").html(
-                        `<a href="${data.url}" target="_blank">View usage</a>`,
-                    );
-                    window.open(data.url, "_blank");
+            } else {
+                fetch(`https://auto-translate.com/api/payment/usage-link`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }).then((response) => {
+                    response.json().then((data) => {
+                        $("#usage").html(
+                            `<a href="${data.url}" target="_blank">View usage</a>`,
+                        );
+                        window.open(data.url, "_blank");
+                    });
                 });
-            });
+            }
         }
 
         $(".tab").removeClass("active");
