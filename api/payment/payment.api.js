@@ -3,6 +3,7 @@ import { config } from "../config/config.js";
 import { verifyInternalToken } from "../utils/auth/auth.js";
 import { updateUserStripeId } from "../utils/db/user.db.js";
 import { track } from "../utils/tracking/trackTelegram.js";
+import { insertFreeTierSubscription } from "../utils/db/free-tier-subscription.db.js";
 
 const stripe = new Stripe(config("STRIPE_KEY"));
 
@@ -80,6 +81,19 @@ export const paymentApi = (fastify, _, done) => {
 
         reply.type("application/json").code(200);
         return { url: session.url };
+    });
+
+    fastify.post("/free-tier", async (request, reply) => {
+        const user = await verifyInternalToken(request.headers.authorization);
+        if (!user) {
+            reply.type("application/json").code(401);
+            return { error: "Unauthorized" };
+        }
+
+        insertFreeTierSubscription(user.id);
+
+        reply.type("application/json").code(200);
+        return { success: true };
     });
 
     done();
