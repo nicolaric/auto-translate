@@ -140,7 +140,6 @@ $("document").ready(async function() {
     });
 
     $(".tab").on("click", function() {
-        console.log("clicked");
         const tabId = $(this).data("tab");
         if (tabId === "usage") {
             if (inTrial) {

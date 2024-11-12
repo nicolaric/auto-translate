@@ -103,6 +103,7 @@ export const paymentApi = (fastify, _, done) => {
         }
 
         insertFreeTierSubscription(user);
+        track(`Free Tier Subscription: ${user.email}`);
 
         reply.type("application/json").code(200);
         return { success: true };

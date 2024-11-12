@@ -12,6 +12,7 @@ import {
     updateFreeTierSubscriptionActive,
     updateFreeTierSubscriptionUsage,
 } from "../utils/db/free-tier-subscription.db.js";
+import { track } from "../utils/tracking/trackTelegram.js";
 
 const stripe = new Stripe(config("STRIPE_KEY"));
 
@@ -118,6 +119,10 @@ export const translateApi = (fastify, _, done) => {
                 stripe_customer_id: user.stripe_id,
             },
         });
+
+        track(
+            `Translation: ${sourceLanguage} -> ${targetLanguage}, ${translatedWords} words, User: ${user.email}, Subscription: ${freeTierActive ? "Free Tier" : "Paid"}`,
+        );
 
         reply.type("application/json").code(200);
         return {
