@@ -90,7 +90,7 @@ export const paymentApi = (fastify, _, done) => {
             return { error: "Unauthorized" };
         }
 
-        insertFreeTierSubscription(user.id);
+        insertFreeTierSubscription(user);
 
         reply.type("application/json").code(200);
         return { success: true };

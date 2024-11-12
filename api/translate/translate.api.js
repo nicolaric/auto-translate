@@ -8,6 +8,7 @@ import { compareJSON, mergeJSON } from "../utils/json/compareJson.js";
 import { countValueWords } from "../utils/json/count-value-words.js";
 import { chunkJson } from "../utils/json/chunk-json.js";
 import {
+    getFreeTierSubscription,
     updateFreeTierSubscriptionActive,
     updateFreeTierSubscriptionUsage,
 } from "../utils/db/free-tier-subscription.db.js";
@@ -31,7 +32,7 @@ export const translateApi = (fastify, _, done) => {
             })
         ).data[0];
 
-        const freeTier = getFreeTierSubscription(user.id);
+        const freeTier = getFreeTierSubscription(user);
 
         const freeTierActive = freeTier && freeTier.active;
 
@@ -41,7 +42,7 @@ export const translateApi = (fastify, _, done) => {
                 return { error: "Subscription Required" };
             }
             if (freeTier.usage >= 100) {
-                updateFreeTierSubscriptionActive(user.id, false);
+                updateFreeTierSubscriptionActive(user, false);
                 reply.type("application/json").code(402);
                 return { error: "Free Tier Limit Reached" };
             }
@@ -107,10 +108,7 @@ export const translateApi = (fastify, _, done) => {
         );
 
         if (freeTierActive) {
-            updateFreeTierSubscriptionUsage(
-                user.id,
-                freeTier.usage + translatedWords,
-            );
+            updateFreeTierSubscriptionUsage(user, freeTier.usage + translatedWords);
         }
 
         await stripe.billing.meterEvents.create({
