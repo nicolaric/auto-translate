@@ -3,7 +3,7 @@ import { executeQuery, executeTransaction } from "./db-connector.js";
 export function insertFreeTierSubscription(user) {
     return executeTransaction(
         "INSERT INTO free_tier_subscription (user, active, created_at, usage) VALUES (?, ?, ?, ?)",
-        [user.id, true, new Date().toISOString(), 0],
+        [user.id, 1, new Date().toISOString(), 0],
     );
 }
 
@@ -23,7 +23,7 @@ export function updateFreeTierSubscriptionUsage(user, usage) {
 export function updateFreeTierSubscriptionActive(user, active) {
     return executeTransaction(
         "UPDATE free_tier_subscription SET active = ? WHERE user = ?",
-        [active, user.id],
+        [active ? 1 : 0, user.id],
     );
 }
 
