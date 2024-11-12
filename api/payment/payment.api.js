@@ -3,7 +3,10 @@ import { config } from "../config/config.js";
 import { verifyInternalToken } from "../utils/auth/auth.js";
 import { updateUserStripeId } from "../utils/db/user.db.js";
 import { track } from "../utils/tracking/trackTelegram.js";
-import { insertFreeTierSubscription } from "../utils/db/free-tier-subscription.db.js";
+import {
+    getFreeTierSubscription,
+    insertFreeTierSubscription,
+} from "../utils/db/free-tier-subscription.db.js";
 
 const stripe = new Stripe(config("STRIPE_KEY"));
 
@@ -49,13 +52,21 @@ export const paymentApi = (fastify, _, done) => {
             return { error: "Unauthorized" };
         }
 
-        if (!user.stripe_id) {
+        const freeTier = getFreeTierSubscription(user);
+        const freeTierActive = freeTier && freeTier.active;
+
+        if (!user.stripe_id && !freeTierActive) {
             const customer = await stripe.customers.create({
                 email: user.email,
             });
 
             user.stripe_id = customer.id;
             await updateUserStripeId(user.id, customer.id);
+        }
+
+        if (freeTierActive) {
+            reply.type("application/json").code(200);
+            return { freeTier: true };
         }
 
         const subscription = await stripe.subscriptions.list({
