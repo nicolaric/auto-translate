@@ -65,8 +65,9 @@ export const paymentApi = (fastify, _, done) => {
         }
 
         if (freeTierActive) {
+            const usage = freeTier.usage;
             reply.type("application/json").code(200);
-            return { freeTier: true };
+            return { freeTier: true, usage };
         }
 
         const subscription = await stripe.subscriptions.list({

@@ -118,6 +118,25 @@
           window.location.href = "/account";
         }
 
+        $("#free-plan").on("click", async () => {
+          console.log("iin");
+          const res = await fetch(
+            "https://auto-translate.com/api/payment/free-tier",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({}),
+            },
+          );
+          const data = await res.json();
+          if (data.success) {
+            window.location.href = "/account";
+          }
+        });
+
         $("#basic-plan").on("click", async () => {
           const res = await fetch(
             "https://auto-translate.com/api/payment/prepare",
@@ -156,6 +175,16 @@
       </div>
 
       <div class="pricing-plans">
+        <div class="plan" id="free-plan">
+          <h2>Free Testing Plan</h2>
+          <p>
+            Test our translation services with a limited number of words for
+            free.
+          </p>
+          <div class="price">$0.00/100 words</div>
+          <p>Single use only. Includes translation for 100 words.</p>
+          <a href="#" class="cta-button">Choose Free Testing Plan</a>
+        </div>
         <!-- Basic Plan -->
         <div class="plan" id="basic-plan">
           <h2>Basic Plan</h2>

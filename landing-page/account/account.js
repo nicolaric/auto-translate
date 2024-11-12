@@ -1,4 +1,5 @@
 const apiKeys = [];
+let inTrial = false;
 
 async function getKeys() {
     try {
@@ -112,6 +113,18 @@ function renderApiKeys() {
 }
 
 $(document).ready(async function() {
+    const paymentStatus = await fetch(
+        "https://auto-translate.com/api/payment/status",
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        },
+    );
+    const paymentStatusData = await paymentStatus.json();
+    inTrial = paymentStatusData.freeTier;
+
     $("#create-api-key-button").on("click", prepareKeyCreation);
     $("#create-key-submit").on("click", async (event) => {
         event.preventDefault();
@@ -128,6 +141,16 @@ $(document).ready(async function() {
     $(".tab").on("click", function() {
         const tabId = $(this).data("tab");
         if (tabId === "usage") {
+            if (inTrial) {
+                $("#usage").html(
+                    `<b>Free trial</b>
+                     <br>
+                     ${paymentStatusData.usage}/100 words translated.
+                     Update to a paid plan to continue using the service here:
+                     <a href="https://auto-translate.com/pricing" target="_blank">View pricing</a>`,
+                );
+                return;
+            }
             fetch(`https://auto-translate.com/api/payment/usage-link`, {
                 method: "GET",
                 headers: {
