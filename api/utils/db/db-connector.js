@@ -2,10 +2,11 @@ import { DatabaseSync } from "node:sqlite";
 
 const db = new DatabaseSync("db.sqlite");
 db.exec(`
-    CREATE TABLE IF NOT EXISTS user (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL UNIQUE,
-        stripe_id TEXT 
+    CREATE TABLE IF NOT EXISTS user" (
+	    id INTEGER PRIMARY KEY AUTOINCREMENT,
+	    email TEXT NOT NULL UNIQUE,
+	    stripe_id TEXT,
+	    creation_date DATE,
     );
 `);
 

@@ -1,7 +1,10 @@
 import { executeQuery, executeTransaction } from "./db-connector.js";
 
 export function insertUser(email) {
-    return executeTransaction("INSERT INTO user (email) VALUES (?)", [email]);
+    return executeTransaction(
+        "INSERT INTO user (email, creation_date) VALUES (?, ?)",
+        [email, new Date().toISOString()],
+    );
 }
 
 export function getUser(id) {
