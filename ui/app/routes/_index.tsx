@@ -2,6 +2,7 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { generateAuthUrl } from "~/lib/oauth-providers/google";
+import { logEvent } from "~/lib/utils/logs";
 
 export const meta = () => {
     return [
@@ -18,6 +19,8 @@ export const meta = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
     // Put "register" in the state so we know where the user is
     // coming from when they are sent back to us from Google.
+    logEvent("page_view", { page: "index" });
+
     return Response.json({
         googleAuthUrl: generateAuthUrl(""),
     });
@@ -32,16 +35,16 @@ export default function Index() {
     const [typedCommand, setTypedCommand] = useState("");
 
     /*useEffect(() => {
-                    let i = 0;
-                    const typeCommand = () => {
-                        if (i < commandText.length) {
-                            setTypedCommand((prev) => prev + commandText.charAt(i));
-                            i++;
-                            setTimeout(typeCommand, 50);
-                        }
-                    };
-                    typeCommand();
-                }, [commandText]);*/
+                      let i = 0;
+                      const typeCommand = () => {
+                          if (i < commandText.length) {
+                              setTypedCommand((prev) => prev + commandText.charAt(i));
+                              i++;
+                              setTimeout(typeCommand, 50);
+                          }
+                      };
+                      typeCommand();
+                  }, [commandText]);*/
 
     return (
         <main className="bg-gray-50 text-gray-800">
