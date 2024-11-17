@@ -35,16 +35,16 @@ export default function Index() {
     const [typedCommand, setTypedCommand] = useState("");
 
     /*useEffect(() => {
-                      let i = 0;
-                      const typeCommand = () => {
-                          if (i < commandText.length) {
-                              setTypedCommand((prev) => prev + commandText.charAt(i));
-                              i++;
-                              setTimeout(typeCommand, 50);
-                          }
-                      };
-                      typeCommand();
-                  }, [commandText]);*/
+                          let i = 0;
+                          const typeCommand = () => {
+                              if (i < commandText.length) {
+                                  setTypedCommand((prev) => prev + commandText.charAt(i));
+                                  i++;
+                                  setTimeout(typeCommand, 50);
+                              }
+                          };
+                          typeCommand();
+                      }, [commandText]);*/
 
     return (
         <main className="bg-gray-50 text-gray-800">
@@ -57,7 +57,7 @@ export default function Index() {
                         </div>
                         <div className="text-2xl font-bold">Auto Translate</div>
                     </a>
-                    <nav className="space-x-6 text-lg font-medium">
+                    <nav className="space-x-6 text-lg font-medium hidden md:inline-block">
                         <a href="#how-it-works" className="hover:underline">
                             How It Works
                         </a>
