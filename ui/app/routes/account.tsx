@@ -155,7 +155,7 @@ export default function Account() {
             {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${session.get("token")}`,
                 },
             }
         );
