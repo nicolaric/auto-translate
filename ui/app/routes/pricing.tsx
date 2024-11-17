@@ -41,25 +41,6 @@ export default function Pricing() {
         subscriptionActive: boolean;
     };
 
-    const handleFreePlanClick = async () => {
-        const res = await fetch(
-            "https://auto-translate.com/api/payment/free-tier",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({}),
-            }
-        );
-
-        const data = await res.json();
-        if (data.success) {
-            window.location.href = "/account";
-        }
-    };
-
     const handleBasicPlanClick = async () => {
         const res = await fetch("https://auto-translate.com/api/payment/prepare", {
             method: "GET",
@@ -105,10 +86,7 @@ export default function Pricing() {
                         <p className="mt-2 text-sm text-gray-600 text-center">
                             Single use only. Includes translation for 100 words.
                         </p>
-                        <button
-                            className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-                            onClick={handleFreePlanClick}
-                        >
+                        <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
                             Choose Free Testing Plan
                         </button>
                     </div>

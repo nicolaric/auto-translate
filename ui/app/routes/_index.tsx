@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { generateAuthUrl } from "~/lib/oauth-providers/google";
 
 export const meta = () => {
@@ -32,16 +32,16 @@ export default function Index() {
     const [typedCommand, setTypedCommand] = useState("");
 
     /*useEffect(() => {
-          let i = 0;
-          const typeCommand = () => {
-              if (i < commandText.length) {
-                  setTypedCommand((prev) => prev + commandText.charAt(i));
-                  i++;
-                  setTimeout(typeCommand, 50);
-              }
-          };
-          typeCommand();
-      }, [commandText]);*/
+                let i = 0;
+                const typeCommand = () => {
+                    if (i < commandText.length) {
+                        setTypedCommand((prev) => prev + commandText.charAt(i));
+                        i++;
+                        setTimeout(typeCommand, 50);
+                    }
+                };
+                typeCommand();
+            }, [commandText]);*/
 
     return (
         <main className="bg-gray-50 text-gray-800">
@@ -96,13 +96,13 @@ export default function Index() {
             </div>
             {/* Terminal */}
             <div className="mt-10 mx-auto max-w-4xl bg-gray-800 text-white rounded-lg shadow-lg">
-                <div className="flex items-center space-x-2 px-4 py-2 bg-gray-700">
+                <div className="flex items-center space-x-2 px-4 py-2 bg-gray-700 rounded-t-lg">
                     <div className="h-4 w-4 bg-red-500 rounded-full"></div>
                     <div className="h-4 w-4 bg-yellow-500 rounded-full"></div>
                     <div className="h-4 w-4 bg-green-500 rounded-full"></div>
                 </div>
                 <div className="p-6">
-                    <pre className="text-lg font-mono">
+                    <pre className="text-lg font-mono overflow-x-auto">
                         <code>
                             auto-translate --source-file=en.json --source-language=en
                             --target-file=de.json --target-language=de
