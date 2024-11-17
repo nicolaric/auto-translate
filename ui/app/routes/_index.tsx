@@ -32,16 +32,16 @@ export default function Index() {
     const [typedCommand, setTypedCommand] = useState("");
 
     /*useEffect(() => {
-                let i = 0;
-                const typeCommand = () => {
-                    if (i < commandText.length) {
-                        setTypedCommand((prev) => prev + commandText.charAt(i));
-                        i++;
-                        setTimeout(typeCommand, 50);
-                    }
-                };
-                typeCommand();
-            }, [commandText]);*/
+                  let i = 0;
+                  const typeCommand = () => {
+                      if (i < commandText.length) {
+                          setTypedCommand((prev) => prev + commandText.charAt(i));
+                          i++;
+                          setTimeout(typeCommand, 50);
+                      }
+                  };
+                  typeCommand();
+              }, [commandText]);*/
 
     return (
         <main className="bg-gray-50 text-gray-800">
@@ -50,7 +50,7 @@ export default function Index() {
                 <div className="container mx-auto flex justify-between items-center px-6">
                     <a href="." className="flex items-center space-x-2">
                         <div className="bg-white h-10 w-10 rounded-full overflow-hidden flex justify-center items-center">
-                            <img src="/public/logo.png" alt="Auto Translate logo" />
+                            <img src="/logo.png" alt="Auto Translate logo" />
                         </div>
                         <div className="text-2xl font-bold">Auto Translate</div>
                     </a>
@@ -87,7 +87,7 @@ export default function Index() {
                     className="flex items-center justify-center bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200"
                 >
                     <img
-                        src="/public/google-logo.svg"
+                        src="/google-logo.svg"
                         alt="Google logo"
                         className="w-5 h-5 mr-3 filter invert"
                     />
