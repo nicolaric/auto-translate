@@ -2,6 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 
 export const meta: MetaFunction = () => {
@@ -15,7 +16,7 @@ export const loader = async ({
   request,
 }: {
   request: Request;
-}): Promise<{ token: string; apiKeys: any[]; paymentStatus: unknown }> => {
+}): Promise<Response> => {
   const session = await requireUserSession(request);
   const keysResponse = await fetch(
     "https://auto-translate.com/api/user/api-token",
@@ -39,7 +40,6 @@ export const loader = async ({
       }
     );
     const res = await paymentStatusReq.json();
-    console.log(res);
     return res;
   };
 
@@ -63,7 +63,14 @@ export const loader = async ({
     paymentStatus = await loadPaymentStatus();
   }
 
-  return { token: session.get("token") as string, apiKeys, paymentStatus };
+  return Response.json(
+    { token: session.get("token") as string, apiKeys, paymentStatus },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 };
 
 export default function Account() {
