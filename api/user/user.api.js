@@ -27,8 +27,8 @@ export const userApi = (fastify, _, done) => {
 
     try {
       if (!user) {
-        user = await insertUser(email);
-        console.log(user);
+        await insertUser(email);
+        user = await getUserByEmail(email);
         track(`New User: ${email}`);
       }
       const token = jwt.sign(
