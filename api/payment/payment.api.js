@@ -71,6 +71,8 @@ export const paymentApi = (fastify, _, done) => {
       limit: 1,
     });
 
+    console.log(subscription);
+
     if (subscription.data.length && freeTierActive) {
       updateFreeTierSubscriptionActive(user, false);
     }

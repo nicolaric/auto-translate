@@ -38,7 +38,9 @@ export const loader = async ({
         },
       }
     );
-    return paymentStatusReq.json();
+    const res = await paymentStatusReq.json();
+    console.log(res);
+    return res;
   };
 
   const apiKeys = await keysResponse.json();
