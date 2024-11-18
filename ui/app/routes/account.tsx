@@ -2,7 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { commitSession } from "~/lib/sessions/sessions";
+import { commitSession, getSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 
 export const meta: MetaFunction = () => {
@@ -63,11 +63,13 @@ export const loader = async ({
     paymentStatus = await loadPaymentStatus();
   }
 
+  const cookie = await commitSession(session);
+
   return Response.json(
     { token: session.get("token") as string, apiKeys, paymentStatus },
     {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": cookie,
       },
     }
   );
