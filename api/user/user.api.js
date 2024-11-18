@@ -19,8 +19,6 @@ export const userApi = (fastify, _, done) => {
       return;
     }
 
-    console.log(verifiedUser);
-
     const email = verifiedUser.email;
 
     let user = await getUserByEmail(email);

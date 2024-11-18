@@ -3,14 +3,10 @@ import { mergeJSON } from "./compareJson.js";
 export function chunkJson(jsonObj, chunkSize, prefix = "") {
   const objLength = jsonObj.length;
 
-  console.log(1);
-  console.log("jsonObj", jsonObj);
-
   if (objLength <= chunkSize) {
     return [jsonObj];
   }
 
-  console.log(2);
   const parsedObj = JSON.parse(jsonObj);
   console.log("parsedObj", parsedObj);
 
