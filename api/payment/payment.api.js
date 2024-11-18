@@ -87,6 +87,7 @@ export const paymentApi = (fastify, _, done) => {
     }
 
     reply.type("application/json").code(200);
+    return {};
   });
 
   fastify.get("/usage-link", async (request, reply) => {
