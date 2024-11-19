@@ -12,7 +12,7 @@ declare global {
  * @example
  * https://developers.google.com/analytics/devguides/collection/gtagjs/pages
  */
-export const pageview = (url: string, trackingId: string) => {
+export function pageview(url: string, trackingId: string) {
   if (!window.gtag) {
     console.warn(
       "window.gtag is not defined. This could mean your google analytics script has not loaded on the page yet."
@@ -22,13 +22,13 @@ export const pageview = (url: string, trackingId: string) => {
   window.gtag("config", trackingId, {
     page_path: url,
   });
-};
+}
 
 /**
  * @example
  * https://developers.google.com/analytics/devguides/collection/gtagjs/events
  */
-export const event = (category: string, body: Record<string, unknown>) => {
+export function event(category: string, body: Record<string, unknown>) {
   if (!window.gtag) {
     console.warn(
       "window.gtag is not defined. This could mean your google analytics script has not loaded on the page yet."
@@ -36,4 +36,4 @@ export const event = (category: string, body: Record<string, unknown>) => {
     return;
   }
   window.gtag("event", category, body);
-};
+}

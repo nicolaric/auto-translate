@@ -71,11 +71,11 @@ export default function Account() {
     paymentStatus: any;
   };
 
-  gtag.event("conversion", {
-    send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
-    value: 0.1,
-    currency: "CHF",
-  });
+  /**gtag.event("conversion", {
+      send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
+      value: 0.1,
+      currency: "CHF",
+    });*/
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
