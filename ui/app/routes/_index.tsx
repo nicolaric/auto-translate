@@ -35,168 +35,183 @@ export default function Index() {
   const [typedCommand, setTypedCommand] = useState("");
 
   /*useEffect(() => {
-                                let i = 0;
-                                const typeCommand = () => {
-                                    if (i < commandText.length) {
-                                        setTypedCommand((prev) => prev + commandText.charAt(i));
-                                        i++;
-                                        setTimeout(typeCommand, 50);
-                                    }
-                                };
-                                typeCommand();
-                            }, [commandText]);*/
+                                        let i = 0;
+                                        const typeCommand = () => {
+                                            if (i < commandText.length) {
+                                                setTypedCommand((prev) => prev + commandText.charAt(i));
+                                                i++;
+                                                setTimeout(typeCommand, 50);
+                                            }
+                                        };
+                                        typeCommand();
+                                    }, [commandText]);*/
 
   return (
-    <main className="bg-gray-50 text-gray-800">
-      {/* Header Section */}
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-6 shadow-md">
-        <div className="container mx-auto flex justify-between items-center px-6">
-          <a href="." className="flex items-center space-x-2">
-            <div className="bg-white h-10 w-10 rounded-full overflow-hidden flex justify-center items-center">
-              <img src="/logo.png" alt="Auto Translate logo" />
-            </div>
-            <div className="text-2xl font-bold">Auto Translate</div>
+    <div>
+      <main className="bg-gray-50 text-gray-800">
+        {/* Header Section */}
+        <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-6 shadow-md">
+          <div className="container mx-auto flex justify-between items-center px-6">
+            <a href="." className="flex items-center space-x-2">
+              <div className="bg-white h-10 w-10 rounded-full overflow-hidden flex justify-center items-center">
+                <img src="/logo.png" alt="Auto Translate logo" />
+              </div>
+              <div className="text-2xl font-bold">Auto Translate</div>
+            </a>
+            <nav className="space-x-6 text-lg font-medium hidden md:inline-block">
+              <a href="#how-it-works" className="hover:underline">
+                How It Works
+              </a>
+              <a href="#upcoming-features" className="hover:underline">
+                Upcoming Features
+              </a>
+              <a href="#faq" className="hover:underline">
+                FAQ
+              </a>
+            </nav>
+          </div>
+        </header>
+
+        {/* Title Section */}
+        <section className="text-center py-20 bg-gradient-to-b from-indigo-100 to-white">
+          <h1 className="text-4xl md:text-6xl font-extrabold">
+            Application translations, <br />
+            <span className="text-blue-600">automated with AI</span>
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-gray-600">
+            Effortlessly translate your app’s language files into multiple
+            languages.
+          </p>
+        </section>
+
+        {/* Google Sign-In */}
+        <div className="flex justify-center mt-8">
+          <a
+            href={googleAuthUrl}
+            className="flex items-center justify-center bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200"
+          >
+            <img
+              src="/google-logo.svg"
+              alt="Google logo"
+              className="w-5 h-5 mr-3 filter invert"
+            />
+            Continue with Google Sign-In
           </a>
-          <nav className="space-x-6 text-lg font-medium hidden md:inline-block">
-            <a href="#how-it-works" className="hover:underline">
+        </div>
+        {/* Terminal */}
+        <div className="mt-10 mx-auto max-w-4xl bg-gray-800 text-white rounded-lg shadow-lg">
+          <div className="flex items-center space-x-2 px-4 py-2 bg-gray-700 rounded-t-lg">
+            <div className="h-4 w-4 bg-red-500 rounded-full"></div>
+            <div className="h-4 w-4 bg-yellow-500 rounded-full"></div>
+            <div className="h-4 w-4 bg-green-500 rounded-full"></div>
+          </div>
+          <div className="p-6">
+            <pre className="text-lg font-mono overflow-x-auto">
+              <code>
+                auto-translate --source-file=en.json --source-language=en
+                --target-file=de.json --target-language=de
+              </code>
+            </pre>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              Why Choose Auto Translate?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Feature
+                icon="🛠️"
+                title="Automatic Translation"
+                description="Simplifies the entire translation process for your app."
+              />
+              <Feature
+                icon="🌍"
+                title="Multi-language Support"
+                description="Supports over 30 languages worldwide."
+              />
+              <Feature
+                icon="🔗"
+                title="CI Pipeline Integration"
+                description="Easily runs in the CI Pipeline for full automation."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section id="how-it-works" className="py-20 bg-white">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center">
               How It Works
-            </a>
-            <a href="#upcoming-features" className="hover:underline">
+            </h2>
+            <p className="text-lg text-gray-600 text-center mt-4 mb-8">
+              Follow these four simple steps to translate your app effortlessly.
+            </p>
+            <Steps />
+          </div>
+        </section>
+
+        <section id="upcoming-features" className="py-20 bg-gray-100">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
               Upcoming Features
-            </a>
-            <a href="#faq" className="hover:underline">
-              FAQ
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      {/* Title Section */}
-      <section className="text-center py-20 bg-gradient-to-b from-indigo-100 to-white">
-        <h1 className="text-4xl md:text-6xl font-extrabold">
-          Application translations, <br />
-          <span className="text-blue-600">automated with AI</span>
-        </h1>
-        <p className="mt-4 text-lg md:text-xl text-gray-600">
-          Effortlessly translate your app’s language files into multiple
-          languages.
-        </p>
-      </section>
-
-      {/* Google Sign-In */}
-      <div className="flex justify-center mt-8">
-        <a
-          href={googleAuthUrl}
-          className="flex items-center justify-center bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200"
-        >
-          <img
-            src="/google-logo.svg"
-            alt="Google logo"
-            className="w-5 h-5 mr-3 filter invert"
-          />
-          Continue with Google Sign-In
-        </a>
-      </div>
-      {/* Terminal */}
-      <div className="mt-10 mx-auto max-w-4xl bg-gray-800 text-white rounded-lg shadow-lg">
-        <div className="flex items-center space-x-2 px-4 py-2 bg-gray-700 rounded-t-lg">
-          <div className="h-4 w-4 bg-red-500 rounded-full"></div>
-          <div className="h-4 w-4 bg-yellow-500 rounded-full"></div>
-          <div className="h-4 w-4 bg-green-500 rounded-full"></div>
-        </div>
-        <div className="p-6">
-          <pre className="text-lg font-mono overflow-x-auto">
-            <code>
-              auto-translate --source-file=en.json --source-language=en
-              --target-file=de.json --target-language=de
-            </code>
-          </pre>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Why Choose Auto Translate?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Feature
-              icon="🛠️"
-              title="Automatic Translation"
-              description="Simplifies the entire translation process for your app."
-            />
-            <Feature
-              icon="🌍"
-              title="Multi-language Support"
-              description="Supports over 30 languages worldwide."
-            />
-            <Feature
-              icon="🔗"
-              title="CI Pipeline Integration"
-              description="Easily runs in the CI Pipeline for full automation."
-            />
+            </h2>
+            <p className="text-lg text-gray-600 text-center mb-12">
+              Exciting new updates and features are on the way to enhance your
+              experience.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <FeatureCard
+                status="Planned"
+                title="Direct GitLab/GitHub Pipeline Integration"
+                description="No need to write your own pipeline definition files. We can do it for you directly."
+              />
+              <FeatureCard
+                status="Planned"
+                title="Improve Translation of Edited Values"
+                description="We will not just find new values to translate, but also improve the translation of values that have been edited."
+              />
+              <FeatureCard
+                status="Planned"
+                title="App-Specific Translations"
+                description="We understand that every application can have specific translations by its usage. Add those easily in your account, and we will ensure that we translate those correctly."
+              />
+              <FeatureCard
+                status="Planned"
+                title="Login with Email"
+                description="You don't have a Google account? No worries, we will soon support simple Email login."
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            How It Works
-          </h2>
-          <p className="text-lg text-gray-600 text-center mt-4 mb-8">
-            Follow these four simple steps to translate your app effortlessly.
-          </p>
-          <Steps />
-        </div>
-      </section>
-
-      <section id="upcoming-features" className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
-            Upcoming Features
-          </h2>
-          <p className="text-lg text-gray-600 text-center mb-12">
-            Exciting new updates and features are on the way to enhance your
-            experience.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <FeatureCard
-              status="Planned"
-              title="Direct GitLab/GitHub Pipeline Integration"
-              description="No need to write your own pipeline definition files. We can do it for you directly."
-            />
-            <FeatureCard
-              status="Planned"
-              title="Improve Translation of Edited Values"
-              description="We will not just find new values to translate, but also improve the translation of values that have been edited."
-            />
-            <FeatureCard
-              status="Planned"
-              title="App-Specific Translations"
-              description="We understand that every application can have specific translations by its usage. Add those easily in your account, and we will ensure that we translate those correctly."
-            />
-            <FeatureCard
-              status="Planned"
-              title="Login with Email"
-              description="You don't have a Google account? No worries, we will soon support simple Email login."
-            />
+        {/* FAQ */}
+        <section id="faq" className="py-20 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              Frequently Asked Questions
+            </h2>
+            <FAQ />
           </div>
+        </section>
+      </main>
+      <footer className="bg-white shadow-md mt-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center space-x-6 text-gray-600">
+          <a href="/legal/imprint" className="hover:text-blue-500">
+            Imprint
+          </a>
+          <a href="/legal/privacy-policy" className="hover:text-blue-500">
+            Privacy Policy
+          </a>
+          <a href="/legal/terms-conditions" className="hover:text-blue-500">
+            Terms and Conditions
+          </a>
         </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Frequently Asked Questions
-          </h2>
-          <FAQ />
-        </div>
-      </section>
-    </main>
+      </footer>
+    </div>
   );
 }
 
