@@ -71,9 +71,10 @@ export default function Account() {
     paymentStatus: any;
   };
 
-  gtag.event({
-    action: "logged_in",
-    category: "account",
+  gtag.event("conversion", {
+    send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
+    value: 0.1,
+    currency: "CHF",
   });
 
   return (

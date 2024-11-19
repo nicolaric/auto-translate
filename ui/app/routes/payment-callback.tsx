@@ -1,7 +1,8 @@
-import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
+import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
+import * as gtag from "~/lib/utils/gtag.client";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await requireUserSession(request);
@@ -42,6 +43,12 @@ export default function PaymentCallback() {
     token: string;
     paymentSuccess: boolean;
   };
+
+  gtag.event("conversion", {
+    send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
+    value: 10,
+    currency: "CHF",
+  });
 
   return (
     <div>

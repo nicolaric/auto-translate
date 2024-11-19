@@ -28,21 +28,12 @@ export const pageview = (url: string, trackingId: string) => {
  * @example
  * https://developers.google.com/analytics/devguides/collection/gtagjs/events
  */
-export const event = ({
-  action,
-  category,
-  label,
-  value,
-}: Record<string, string>) => {
+export const event = (category: string, body: Record<string, unknown>) => {
   if (!window.gtag) {
     console.warn(
       "window.gtag is not defined. This could mean your google analytics script has not loaded on the page yet."
     );
     return;
   }
-  window.gtag("event", action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-  });
+  window.gtag("event", category, body);
 };
