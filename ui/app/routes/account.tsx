@@ -1,8 +1,6 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { useState } from "react";
-import { commitSession, getSession } from "~/lib/sessions/sessions";
+import { NavLink, Outlet, redirect, useLoaderData } from "@remix-run/react";
+import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 
 export const meta: MetaFunction = () => {
@@ -18,16 +16,6 @@ export const loader = async ({
   request: Request;
 }): Promise<Response> => {
   const session = await requireUserSession(request);
-  const keysResponse = await fetch(
-    "https://auto-translate.com/api/user/api-token",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.get("token")}`,
-      },
-    }
-  );
 
   const loadPaymentStatus = async () => {
     const paymentStatusReq = await fetch(
@@ -43,7 +31,6 @@ export const loader = async ({
     return res;
   };
 
-  const apiKeys = await keysResponse.json();
   let paymentStatus = await loadPaymentStatus();
 
   if (!paymentStatus.data?.length && !paymentStatus.freeTier) {
@@ -63,118 +50,24 @@ export const loader = async ({
     paymentStatus = await loadPaymentStatus();
   }
 
-  const cookie = await commitSession(session);
+  const url = new URL(request.url);
+  if (url.pathname === "/account") {
+    return redirect("/account/api-keys");
+  }
 
   return Response.json(
-    { token: session.get("token") as string, apiKeys, paymentStatus },
+    { paymentStatus },
     {
       headers: {
-        "Set-Cookie": cookie,
+        "Set-Cookie": await commitSession(session),
       },
     }
   );
 };
 
 export default function Account() {
-  const [isCreateKeyDialogOpen, setCreateKeyDialogOpen] = useState(false);
-  const [isCopyKeyDialogOpen, setCopyKeyDialogOpen] = useState<
-    { open: false } | { open: true; secret: string }
-  >({ open: false });
-  const [isDeleteKeyDialogOpen, setDeleteKeyDialogOpen] = useState<
-    { open: false } | { open: true; id: string }
-  >({ open: false });
-
-  const openCreateKeyDialog = () => setCreateKeyDialogOpen(true);
-  const closeCreateKeyDialog = () => setCreateKeyDialogOpen(false);
-
-  const openCopyKeyDialog = (secret: string) =>
-    setCopyKeyDialogOpen({ open: true, secret });
-  const closeCopyKeyDialog = () => setCopyKeyDialogOpen({ open: false });
-
-  const openDeleteKeyDialog = (id: string) =>
-    setDeleteKeyDialogOpen({ open: true, id });
-  const closeDeleteKeyDialog = () => setDeleteKeyDialogOpen({ open: false });
-
-  let usage: string | undefined;
-
-  const {
-    token,
-    apiKeys: initialApiKeys,
-    paymentStatus,
-  } = useLoaderData() as {
-    token: string;
-    apiKeys: any[];
+  const { paymentStatus } = useLoaderData() as {
     paymentStatus: any;
-  };
-
-  const [apiKeys, setApiKeys] = useState(initialApiKeys);
-
-  const [keyName, setKeyName] = useState("");
-  const handleChangeKeyName = (event) => setKeyName(event.target.value);
-
-  const handleCreateKey = async () => {
-    const name = keyName.trim();
-    try {
-      const newKeyRequest = await fetch(
-        "https://auto-translate.com/api/user/api-token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ name }),
-        }
-      );
-      setKeyName("");
-      const newKey = await newKeyRequest.json();
-      openCopyKeyDialog(newKey.token);
-      closeCreateKeyDialog();
-      setApiKeys([...apiKeys, newKey]);
-    } catch (error) {
-      console.error("Error creating API key:", error);
-    }
-  };
-
-  const handleDeleteKey = async () => {
-    try {
-      const deleteKey = isDeleteKeyDialogOpen;
-      if (!deleteKey.open) return;
-
-      const deleteReq = await fetch(
-        `https://auto-translate.com/api/user/api-token/${deleteKey.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      await deleteReq.json();
-
-      setApiKeys([...apiKeys.filter((ak) => ak.id !== deleteKey.id)]);
-      closeDeleteKeyDialog();
-    } catch (error) {
-      console.error("Error deleting API key:", error);
-    }
-  };
-
-  const loadUsageLink = async () => {
-    const usageLinkReq = await fetch(
-      `https://auto-translate.com/api/payment/usage-link`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session.get("token")}`,
-        },
-      }
-    );
-
-    const usageLink = await usageLinkReq.json();
-
-    window.open(usageLink.url, "_blank");
-    usage = usageLink.url;
   };
 
   return (
@@ -183,15 +76,42 @@ export default function Account() {
       <header className="bg-white shadow-md p-4 flex justify-between items-center">
         <a href="." className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden">
-            <img src="logo.png" alt="Auto Translate" />
+            <img src="/logo.png" alt="Auto Translate" />
           </div>
           <span className="text-xl font-bold">Auto Translate</span>
         </a>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto py-8">
+      <div className="max-w-4xl mx-auto py-8 mb-2">
         <h1 className="text-3xl font-bold text-center mb-6">Your Account</h1>
+
+        <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
+          <b>How to Use This Service</b>
+          <ol>
+            <li>
+              1. Create an API Key using the{" "}
+              <strong>+ Create New API Key</strong> button on this page and copy
+              it.
+            </li>
+            <li>
+              2. Create the environment variable
+              &quot;AUTO_TRANSLATE_API_KEY&quot; on your computer and set it to
+              your copied API key.
+            </li>
+            <li>
+              3. Run the following command locally to translate files:
+              <pre className="bg-gray-100 p-2.5 rounded-md overflow-x-auto">
+                npx @auto-translate/cli --source-file en.json --source-language
+                en --target-file de.json --target-language de
+              </pre>
+            </li>
+          </ol>
+          <p className="text-gray-500">
+            Replace <code>en.json</code> and <code>de.json</code> with your
+            actual file names and languages.
+          </p>
+        </div>
 
         {!paymentStatus.data?.length && (
           <div className="bg-yellow-100 p-4 text-yellow-900 rounded-md text-center mb-6">
@@ -203,181 +123,35 @@ export default function Account() {
           </div>
         )}
 
-        {/* Tabs */}
-        <TabGroup>
-          <TabList className="flex space-x-2 bg-gray-200 p-2 rounded-md">
-            <Tab
-              className={({ selected }) =>
-                selected
-                  ? "bg-blue-600 text-white px-4 py-2 rounded-md"
-                  : "bg-white text-gray-600 px-4 py-2 rounded-md"
-              }
-            >
-              API Keys
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                selected
-                  ? "bg-blue-600 text-white px-4 py-2 rounded-md"
-                  : "bg-white text-gray-600 px-4 py-2 rounded-md"
-              }
-              onClick={loadUsageLink}
-            >
-              Usage and Subscription
-            </Tab>
-          </TabList>
+        <div className="flex justify-center space-x-4">
+          <NavLink
+            to={{
+              pathname: "./api-keys",
+            }}
+            className={({ isActive }) =>
+              `block text-white px-4 py-2 rounded-md mb-4 ${
+                isActive ? "bg-blue-900" : "bg-blue-600"
+              }`
+            }
+          >
+            API Keys
+          </NavLink>
+          <NavLink
+            to={{
+              pathname: "./usage",
+            }}
+            className={({ isActive }) =>
+              `block text-white px-4 py-2 rounded-md mb-4 ${
+                isActive ? "bg-blue-900" : "bg-blue-600"
+              }`
+            }
+          >
+            Usage and Subscription
+          </NavLink>
+        </div>
 
-          <TabPanels>
-            {/* API Keys Tab */}
-            <TabPanel className="mt-6">
-              <button
-                onClick={openCreateKeyDialog}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md mb-4"
-              >
-                + Create New API Key
-              </button>
-
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 p-2">Name</th>
-                    <th className="border border-gray-300 p-2">Last Used</th>
-                    <th className="border border-gray-300 p-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {apiKeys?.map((key, index) => (
-                    <tr key={key.id || index}>
-                      {" "}
-                      {/* Use a unique key, e.g., key.id */}
-                      <td className="border border-gray-300 p-2">
-                        {key.name || "Unknown Key"}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        {key.lastUsed || "Never Used"}
-                      </td>
-                      <td className="border border-gray-300 p-2 text-right">
-                        <button
-                          onClick={() => openDeleteKeyDialog(key.id)}
-                          className="text-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </TabPanel>
-
-            {/* Usage and Subscription Tab */}
-            <TabPanel className="mt-6">
-              <div className="text-gray-700">
-                {paymentStatus.freeTier && (
-                  <div>
-                    <b>Free Trial</b>
-                    <p>
-                      {paymentStatus.usage}/100 words translated. Update to a
-                      paid plan to continue using the service here:{" "}
-                      <a href="/pricing" className="text-blue">
-                        View pricing
-                      </a>
-                    </p>
-                  </div>
-                )}
-                {!paymentStatus.freeTier && (
-                  <div>
-                    <a href={usage}>View usage</a>
-                  </div>
-                )}
-              </div>
-            </TabPanel>
-          </TabPanels>
-        </TabGroup>
+        <Outlet />
       </div>
-
-      {/* Create Key Dialog */}
-      {isCreateKeyDialogOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Create New API Key</h2>
-            <input
-              type="text"
-              placeholder="Enter API key name"
-              className="w-full border border-gray-300 rounded-md p-2 mb-4"
-              value={keyName}
-              onChange={handleChangeKeyName}
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={closeCreateKeyDialog}
-                className="px-4 py-2 bg-gray-200 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                onClick={handleCreateKey}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Copy Key Dialog */}
-      {isCopyKeyDialogOpen.open && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Save Your API Key</h2>
-            <p className="text-gray-600 mb-4">
-              Please save this secret key somewhere safe and accessible. You
-              won&apos;t be able to view it again.
-            </p>
-            <input
-              type="text"
-              value={isCopyKeyDialogOpen.secret}
-              className="w-full border border-gray-300 rounded-md p-2 mb-4"
-              readOnly
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={closeCopyKeyDialog}
-                className="px-4 py-2 bg-gray-200 rounded-md"
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Key Dialog */}
-      {isDeleteKeyDialogOpen.open && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Delete API Key</h2>
-            <p className="text-gray-600 mb-4">
-              Are you sure you want to delete this API key?
-            </p>
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={closeDeleteKeyDialog}
-                className="px-4 py-2 bg-gray-200 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-red-600 text-white rounded-md"
-                onClick={handleDeleteKey}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
