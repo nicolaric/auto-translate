@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, redirect, useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
@@ -71,11 +72,15 @@ export default function Account() {
     paymentStatus: any;
   };
 
-  /**gtag.event("conversion", {
-      send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
-      value: 0.1,
-      currency: "CHF",
-    });*/
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      gtag.event("conversion", {
+        send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
+        value: 0.1,
+        currency: "CHF",
+      });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
