@@ -2,6 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, redirect, useLoaderData } from "@remix-run/react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
+import * as gtag from "~/lib/utils/gtag.client";
 
 export const meta: MetaFunction = () => {
   return [
@@ -69,6 +70,11 @@ export default function Account() {
   const { paymentStatus } = useLoaderData() as {
     paymentStatus: any;
   };
+
+  gtag.event({
+    action: "logged_in",
+    category: "account",
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">

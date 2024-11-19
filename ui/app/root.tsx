@@ -32,6 +32,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        {process.env.NODE_ENV !== "development" && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=AW-1003296964,`}
+            />
+            <script
+              async
+              id="gtag-init"
+              dangerouslySetInnerHTML={{
+                __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+              `,
+              }}
+            />
+          </>
+        )}
         {children}
         <ScrollRestoration />
         <Scripts />
