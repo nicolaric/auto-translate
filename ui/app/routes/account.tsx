@@ -83,66 +83,20 @@ export default function Account() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
+    <div className="flex flex-col gap-4 min-h-screen bg-gray-100 text-gray-900 p-4">
       {/* Header Section */}
-      <header className="bg-white shadow-md p-4 flex justify-between items-center">
-        <a href="." className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden">
-            <img src="/logo.png" alt="Auto Translate" />
+      <div className="flex bg-gray-200 p-2 gap-4 rounded-xl">
+        <div className="w-60">
+          <div className="w-12 h-12 m-auto mb-4">
+            <img src="/logo-small.png" alt="Logo" />
           </div>
-          <span className="text-xl font-bold">Auto Translate</span>
-        </a>
-      </header>
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto py-8 mb-2">
-        <h1 className="text-3xl font-bold text-center mb-6">Your Account</h1>
-
-        <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
-          <b>How to Use This Service</b>
-          <ol>
-            <li>
-              1. Create an API Key using the{" "}
-              <strong>+ Create New API Key</strong> button on this page and copy
-              it.
-            </li>
-            <li>
-              2. Create the environment variable
-              &quot;AUTO_TRANSLATE_API_KEY&quot; on your computer and set it to
-              your copied API key.
-            </li>
-            <li>
-              3. Run the following command locally to translate files:
-              <pre className="bg-gray-100 p-2.5 rounded-md overflow-x-auto">
-                npx @auto-translate/cli --source-file en.json --source-language
-                en --target-file de.json --target-language de
-              </pre>
-            </li>
-          </ol>
-          <p className="text-gray-500">
-            Replace <code>en.json</code> and <code>de.json</code> with your
-            actual file names and languages.
-          </p>
-        </div>
-
-        {!paymentStatus.data?.length && (
-          <div className="bg-yellow-100 p-4 text-yellow-900 rounded-md text-center mb-6">
-            You are still on the limited free plan. Consider switching to a paid
-            plan to continue using the service.{" "}
-            <a href="/pricing" className="text-blue-600">
-              View pricing
-            </a>
-          </div>
-        )}
-
-        <div className="flex justify-center space-x-4">
           <NavLink
             to={{
               pathname: "./api-keys",
             }}
             className={({ isActive }) =>
-              `block text-white px-4 py-2 rounded-md mb-4 ${
-                isActive ? "bg-blue-900" : "bg-blue-600"
+              `block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap ${
+                isActive ? "bg-white shadow-md" : ""
               }`
             }
           >
@@ -153,16 +107,55 @@ export default function Account() {
               pathname: "./usage",
             }}
             className={({ isActive }) =>
-              `block text-white px-4 py-2 rounded-md mb-4 ${
-                isActive ? "bg-blue-900" : "bg-blue-600"
+              `block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap ${
+                isActive ? "bg-white shadow-md" : ""
               }`
             }
           >
-            Usage and Subscription
+            Usage
           </NavLink>
         </div>
+        {/* Main Content */}
+        <div className="mx-auto p-8 bg-white rounded-xl w-full">
+          <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
+            <b>How to Use This Service</b>
+            <ol>
+              <li>
+                1. Create an API Key using the{" "}
+                <strong>+ Create New API Key</strong> button on this page and
+                copy it.
+              </li>
+              <li>
+                2. Create the environment variable
+                &quot;AUTO_TRANSLATE_API_KEY&quot; on your computer and set it
+                to your copied API key.
+              </li>
+              <li>
+                3. Run the following command locally to translate files:
+                <pre className="bg-gray-100 p-2.5 rounded-md overflow-x-auto">
+                  npx @auto-translate/cli --source-file en.json
+                  --source-language en --target-file de.json --target-language
+                  de
+                </pre>
+              </li>
+            </ol>
+            <p className="text-gray-500">
+              Replace <code>en.json</code> and <code>de.json</code> with your
+              actual file names and languages.
+            </p>
+          </div>
 
-        <Outlet />
+          {!paymentStatus.data?.length && (
+            <div className="bg-yellow-100 p-4 text-yellow-900 rounded-md text-center mb-6">
+              You are still on the limited free plan. Consider switching to a
+              paid plan to continue using the service.{" "}
+              <a href="/pricing" className="text-blue-600">
+                View pricing
+              </a>
+            </div>
+          )}
+          <Outlet />
+        </div>
       </div>
     </div>
   );

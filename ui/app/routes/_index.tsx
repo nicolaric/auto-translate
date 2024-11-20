@@ -35,16 +35,16 @@ export default function Index() {
   const [typedCommand, setTypedCommand] = useState("");
 
   /*useEffect(() => {
-                                        let i = 0;
-                                        const typeCommand = () => {
-                                            if (i < commandText.length) {
-                                                setTypedCommand((prev) => prev + commandText.charAt(i));
-                                                i++;
-                                                setTimeout(typeCommand, 50);
-                                            }
-                                        };
-                                        typeCommand();
-                                    }, [commandText]);*/
+                                          let i = 0;
+                                          const typeCommand = () => {
+                                              if (i < commandText.length) {
+                                                  setTypedCommand((prev) => prev + commandText.charAt(i));
+                                                  i++;
+                                                  setTimeout(typeCommand, 50);
+                                              }
+                                          };
+                                          typeCommand();
+                                      }, [commandText]);*/
 
   return (
     <div>
@@ -54,7 +54,7 @@ export default function Index() {
           <div className="container mx-auto flex justify-between items-center px-6">
             <a href="." className="flex items-center space-x-2">
               <div className="bg-white h-10 w-10 rounded-full overflow-hidden flex justify-center items-center">
-                <img src="/logo.png" alt="Auto Translate logo" />
+                <img src="/logo-small.png" alt="Auto Translate logo" />
               </div>
               <div className="text-2xl font-bold">Auto Translate</div>
             </a>
