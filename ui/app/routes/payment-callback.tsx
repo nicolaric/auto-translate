@@ -1,5 +1,6 @@
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
@@ -44,11 +45,15 @@ export default function PaymentCallback() {
     paymentSuccess: boolean;
   };
 
-  gtag.event("conversion", {
-    send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
-    value: 10,
-    currency: "CHF",
-  });
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      gtag.event("conversion", {
+        send_to: "AW-1003296964/bVXlCP-z5OYZEMSxtN4D",
+        value: 10,
+        currency: "CHF",
+      });
+    }
+  }, []);
 
   return (
     <div>
