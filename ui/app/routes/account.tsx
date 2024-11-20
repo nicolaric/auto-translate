@@ -1,9 +1,10 @@
 import type { MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, redirect, useLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
+import { List } from "@phosphor-icons/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -72,6 +73,9 @@ export default function Account() {
     paymentStatus: any;
   };
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleMobileMenuOpen = () => setMobileMenuOpen(!mobileMenuOpen);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       gtag.event("conversion", {
@@ -85,8 +89,8 @@ export default function Account() {
   return (
     <div className="flex flex-col gap-4 min-h-screen bg-gray-100 text-gray-900 p-4">
       {/* Header Section */}
-      <div className="flex bg-gray-200 p-2 gap-4 rounded-xl">
-        <div className="w-60">
+      <div className="flex bg-gray-200 p-2 gap-4 rounded-xl flex-col sm:flex-row">
+        <div className="w-60 sm:block hidden">
           <div className="w-12 h-12 m-auto mb-4">
             <img src="/logo-small.png" alt="Logo" />
           </div>
@@ -115,8 +119,38 @@ export default function Account() {
             Usage
           </NavLink>
         </div>
+        <div className="block sm:hidden">
+          <div className="flex justify-between w-full">
+            <div className="w-12 h-12">
+              <img src="/logo-small.png" alt="Logo" />
+            </div>
+            <button onClick={toggleMobileMenuOpen}>
+              <List size={32} />
+            </button>
+          </div>
+          {mobileMenuOpen && (
+            <div>
+              <NavLink
+                to={{
+                  pathname: "./api-keys",
+                }}
+                className="block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap w-full"
+              >
+                API Keys
+              </NavLink>
+              <NavLink
+                to={{
+                  pathname: "./usage",
+                }}
+                className="w-full block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap"
+              >
+                Usage
+              </NavLink>
+            </div>
+          )}
+        </div>
         {/* Main Content */}
-        <div className="mx-auto p-8 bg-white rounded-xl w-full">
+        <div className="mx-auto p-8 bg-white rounded-xl w-full overflow-auto">
           <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
             <b>How to Use This Service</b>
             <ol>
