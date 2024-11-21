@@ -23,6 +23,7 @@ const openai = new OpenAI({
 
 export const translateApi = (fastify, _, done) => {
     fastify.post("/", async (request, reply) => {
+        track("Translation Request");
         const tokenObject = await verifyApiToken(request.headers["api-token"]);
         const user = getUser(tokenObject.user);
         const subscription = (
