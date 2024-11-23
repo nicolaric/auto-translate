@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
-import { List } from "@phosphor-icons/react";
+import { ChartLineUp, Key, List } from "@phosphor-icons/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -99,24 +99,26 @@ export default function Account() {
               pathname: "./api-keys",
             }}
             className={({ isActive }) =>
-              `block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap ${
+              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 ${
                 isActive ? "bg-white shadow-md" : ""
               }`
             }
           >
-            API Keys
+            <Key size={16} />
+            <span>API Keys</span>
           </NavLink>
           <NavLink
             to={{
               pathname: "./usage",
             }}
             className={({ isActive }) =>
-              `block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap ${
+              `flex text-gray-700 px-4 py-1 rounded-md whitespace-nowrap items-center gap-2 ${
                 isActive ? "bg-white shadow-md" : ""
               }`
             }
           >
-            Usage
+            <ChartLineUp size={16} />
+            <span>Usage</span>
           </NavLink>
         </div>
         <div className="block sm:hidden">
@@ -129,28 +131,30 @@ export default function Account() {
             </button>
           </div>
           {mobileMenuOpen && (
-            <div>
+            <div className="mt-4">
               <NavLink
                 to={{
                   pathname: "./api-keys",
                 }}
-                className="block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap w-full"
+                className="flex items-center gap-2 text-gray-700 px-4 py-1 rounded-md whitespace-nowrap w-full"
               >
-                API Keys
+                <Key size={16} />
+                <span>API Keys</span>
               </NavLink>
               <NavLink
                 to={{
                   pathname: "./usage",
                 }}
-                className="w-full block text-gray-700 px-4 py-1 rounded-md whitespace-nowrap"
+                className="w-full flex items-center gap-2 text-gray-700 px-4 py-1 rounded-md whitespace-nowrap"
               >
-                Usage
+                <ChartLineUp size={16} />
+                <span>Usage</span>
               </NavLink>
             </div>
           )}
         </div>
         {/* Main Content */}
-        <div className="mx-auto p-8 bg-white rounded-xl w-full overflow-auto">
+        <div className="mx-auto p-8 bg-white rounded-xl w-full overflow-auto shadow-md">
           <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
             <b>How to Use This Service</b>
             <ol>

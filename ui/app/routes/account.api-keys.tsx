@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { requireUserSession } from "~/lib/utils/auth.server";
 
 export const meta: MetaFunction = () => {
@@ -85,8 +86,10 @@ export default function Account() {
       openCopyKeyDialog(newKey.token);
       closeCreateKeyDialog();
       setApiKeys([...apiKeys, newKey]);
+      toast.success("Created API key successfully");
     } catch (error) {
       console.error("Error creating API key:", error);
+      toast.error("Error creating API key");
     }
   };
 
@@ -109,13 +112,16 @@ export default function Account() {
 
       setApiKeys([...apiKeys.filter((ak) => ak.id !== deleteKey.id)]);
       closeDeleteKeyDialog();
+      toast.success("Deleted API key successfully");
     } catch (error) {
       console.error("Error deleting API key:", error);
+      toast.error("Error deleting API key");
     }
   };
 
   return (
     <div>
+      <Toaster />
       <button
         onClick={openCreateKeyDialog}
         className="bg-blue-600 text-white px-4 py-2 rounded-md mb-4"
@@ -123,12 +129,12 @@ export default function Account() {
         + Create New API Key
       </button>
 
-      <table className="w-full border-collapse border border-gray-300">
+      <table className="w-full border-collapse ">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 p-2">Name</th>
-            <th className="border border-gray-300 p-2">Last Used</th>
-            <th className="border border-gray-300 p-2"></th>
+          <tr className="text-gray-700">
+            <th className="p-2 text-left rounded-l-md bg-gray-200">Name</th>
+            <th className="p-2 text-left bg-gray-200">Last Used</th>
+            <th className="p-2 text-left bg-gray-200 rounded-r-md"></th>
           </tr>
         </thead>
         <tbody>
@@ -136,13 +142,9 @@ export default function Account() {
             <tr key={key.id || index}>
               {" "}
               {/* Use a unique key, e.g., key.id */}
-              <td className="border border-gray-300 p-2">
-                {key.name || "Unknown Key"}
-              </td>
-              <td className="border border-gray-300 p-2">
-                {key.lastUsed || "Never Used"}
-              </td>
-              <td className="border border-gray-300 p-2 text-right">
+              <td className="p-2">{key.name || "Unknown Key"}</td>
+              <td className="p-2">{key.lastUsed || "Never Used"}</td>
+              <td className=" p-2 text-right">
                 <button
                   onClick={() => openDeleteKeyDialog(key.id)}
                   className="text-red-600"
