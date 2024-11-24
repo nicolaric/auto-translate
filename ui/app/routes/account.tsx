@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
-import { ChartLineUp, Key, List, Translate } from "@phosphor-icons/react";
+import { ChartLineUp, Key, List, Translate, X } from "@phosphor-icons/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -73,6 +73,7 @@ export default function Account() {
     paymentStatus: any;
   };
 
+  const [usageInfoOpen, setUsageInfoOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const toggleMobileMenuOpen = () => setMobileMenuOpen(!mobileMenuOpen);
 
@@ -99,7 +100,7 @@ export default function Account() {
               pathname: "./translator",
             }}
             className={({ isActive }) =>
-              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 ${
+              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 mb-2 ${
                 isActive ? "bg-white shadow-md" : ""
               }`
             }
@@ -112,7 +113,7 @@ export default function Account() {
               pathname: "./api-keys",
             }}
             className={({ isActive }) =>
-              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 ${
+              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 mb-2 ${
                 isActive ? "bg-white shadow-md" : ""
               }`
             }
@@ -125,7 +126,7 @@ export default function Account() {
               pathname: "./usage",
             }}
             className={({ isActive }) =>
-              `flex text-gray-700 px-4 py-1 rounded-md whitespace-nowrap items-center gap-2 ${
+              `flex text-gray-700 px-4 py-1 rounded-md whitespace-nowrap items-center gap-2 mb-2 ${
                 isActive ? "bg-white shadow-md" : ""
               }`
             }
@@ -178,33 +179,41 @@ export default function Account() {
         </div>
         {/* Main Content */}
         <div className="mx-auto p-8 bg-white rounded-xl w-full overflow-auto shadow-md">
-          <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
-            <b>How to Use This Service</b>
-            <ol>
-              <li>
-                1. Create an API Key using the{" "}
-                <strong>+ Create New API Key</strong> button on this page and
-                copy it.
-              </li>
-              <li>
-                2. Create the environment variable
-                &quot;AUTO_TRANSLATE_API_KEY&quot; on your computer and set it
-                to your copied API key.
-              </li>
-              <li>
-                3. Run the following command locally to translate files:
-                <pre className="bg-gray-100 p-2.5 rounded-md overflow-x-auto">
-                  npx @auto-translate/cli --source-file en.json
-                  --source-language en --target-file de.json --target-language
-                  de
-                </pre>
-              </li>
-            </ol>
-            <p className="text-gray-500">
-              Replace <code>en.json</code> and <code>de.json</code> with your
-              actual file names and languages.
-            </p>
-          </div>
+          {usageInfoOpen && (
+            <div className="bg-blue-100 p-4 text-blue-900 rounded-md mb-6">
+              <button
+                onClick={() => setUsageInfoOpen(false)}
+                className="float-right"
+              >
+                <X size={16} />
+              </button>
+              <b>How to Use This Service</b>
+              <ol>
+                <li>
+                  1. Create an API Key using the{" "}
+                  <strong>+ Create New API Key</strong> button on this page and
+                  copy it.
+                </li>
+                <li>
+                  2. Create the environment variable
+                  &quot;AUTO_TRANSLATE_API_KEY&quot; on your computer and set it
+                  to your copied API key.
+                </li>
+                <li>
+                  3. Run the following command locally to translate files:
+                  <pre className="bg-gray-100 p-2.5 rounded-md overflow-x-auto">
+                    npx @auto-translate/cli --source-file en.json
+                    --source-language en --target-file de.json --target-language
+                    de
+                  </pre>
+                </li>
+              </ol>
+              <p className="text-gray-500">
+                Replace <code>en.json</code> and <code>de.json</code> with your
+                actual file names and languages.
+              </p>
+            </div>
+          )}
 
           {!paymentStatus.data?.length && (
             <div className="bg-yellow-100 p-4 text-yellow-900 rounded-md text-center mb-6">

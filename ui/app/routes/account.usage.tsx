@@ -48,6 +48,8 @@ export default function Account() {
     usageLink: { url: string } | undefined;
   };
 
+  console.log(paymentStatus);
+
   return (
     <div className="mt-6">
       <div className="text-gray-700">
