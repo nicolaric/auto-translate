@@ -55,7 +55,7 @@ export const loader = async ({
 
   const url = new URL(request.url);
   if (url.pathname === "/account") {
-    return redirect("/account/api-keys");
+    return redirect("/account/translator");
   }
 
   return Response.json(

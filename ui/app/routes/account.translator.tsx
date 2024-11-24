@@ -1,5 +1,6 @@
+import { CircleNotch } from "@phosphor-icons/react";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { useState } from "react";
 import { useToast } from "~/lib/components/toast";
 import { requireUserSession } from "~/lib/utils/auth.server";
@@ -34,7 +35,15 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     JSON.parse(sourceJson);
   } catch {
-    errors.sourceJson = "Invalid JSON";
+    errors.sourceJson = "Invalid JSON, please check your input";
+  }
+
+  if (!sourceLanguage) {
+    errors.sourceLanguage = "Please select source language";
+  }
+
+  if (!targetLanguage) {
+    errors.targetLanguage = "Please select target language";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -43,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const session = await requireUserSession(request);
 
-  const translateReq = await fetch("https://auto-translate.com/translate", {
+  const translateReq = await fetch("https://auto-translate.com/api/translate", {
     method: "POST",
     body: JSON.stringify({
       sourceLanguage,
@@ -56,33 +65,42 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   });
 
-  return {
-    targetJson: await translateReq.json(),
-  };
+  return Response.json({
+    errors: {
+      api: !translateReq.ok && (await translateReq.json()),
+    },
+    ...(translateReq.ok ? { targetJson: await translateReq.json() } : {}),
+  });
 }
 
 export default function Account() {
   const { showToast } = useToast();
 
-  const [setLoading, isLoading] = useState(false);
-
-  const translate = () => {};
-
   const actionData = useActionData<typeof action>();
 
+  const [isLoading, setLoading] = useState(false);
+
+  if (actionData && isLoading) {
+    setLoading(false);
+    if (actionData.errors?.api) {
+      showToast(actionData.errors.api?.error, "error");
+    }
+  }
+
   const supportedLanguages = [
-    { code: "zh", name: "Mandarin Chinese" },
-    { code: "es", name: "Spanish" },
+    { code: "", name: "Please choose language" },
     { code: "en", name: "English" },
+    { code: "es", name: "Spanish" },
+    { code: "fr", name: "French" },
+    { code: "pt", name: "Portuguese" },
+    { code: "de", name: "German" },
+    { code: "zh", name: "Mandarin Chinese" },
     { code: "hi", name: "Hindi" },
     { code: "ar", name: "Arabic" },
     { code: "bn", name: "Bengali" },
-    { code: "pt", name: "Portuguese" },
     { code: "ru", name: "Russian" },
     { code: "ja", name: "Japanese" },
-    { code: "de", name: "German" },
     { code: "ko", name: "Korean" },
-    { code: "fr", name: "French" },
     { code: "tr", name: "Turkish" },
     { code: "vi", name: "Vietnamese" },
     { code: "it", name: "Italian" },
@@ -104,9 +122,9 @@ export default function Account() {
   ];
 
   return (
-    <div>
-      <div className="flex flex-col gap-4">
-        <Form method="post">
+    <div className="flex flex-col gap-4">
+      <Form method="post">
+        <div className="flex flex-col gap-4">
           <div className="flex flex-col">
             <label htmlFor="source-language">Select source language</label>
             <select
@@ -119,7 +137,12 @@ export default function Account() {
                   {language.name}
                 </option>
               ))}
-            </select>
+            </select>{" "}
+            {actionData?.errors?.sourceLanguage ? (
+              <em className="text-red-600">
+                {actionData?.errors.sourceLanguage}
+              </em>
+            ) : null}
           </div>
           <div className="flex flex-col">
             <label htmlFor="source-json">Source JSON</label>
@@ -130,6 +153,9 @@ export default function Account() {
               rows={10}
               placeholder="Enter JSON to translate"
             ></textarea>
+            {actionData?.errors?.sourceJson ? (
+              <em className="text-red-600">{actionData?.errors.sourceJson}</em>
+            ) : null}
           </div>
           <div className="flex flex-col">
             <label htmlFor="language-selector">Select target language</label>
@@ -144,15 +170,31 @@ export default function Account() {
                 </option>
               ))}
             </select>
+            {actionData?.errors?.targetLanguage ? (
+              <em className="text-red-600">
+                {actionData?.errors.targetLanguage}
+              </em>
+            ) : null}
           </div>
           <button
             type="submit"
-            className=" px-4 py-2 bg-blue-600 text-white rounded-md"
+            onClick={() => setLoading(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
           >
-            Translate!
+            {!isLoading ? (
+              "Translate"
+            ) : (
+              <CircleNotch size={16} className="animate-spin" />
+            )}
           </button>
-        </Form>
-      </div>
+        </div>
+      </Form>
+      {actionData?.targetJson && (
+        <div className="bg-gray-200 rounded-md p-4">
+          <div className="text-xl">Translated JSON</div>
+          <pre>{actionData.targetJson.translation}</pre>
+        </div>
+      )}
     </div>
   );
 }

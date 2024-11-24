@@ -106,17 +106,23 @@ const Toast = forwardRef<
         style={{ width, WebkitTapHighlightColor: "transparent" }}
       >
         <div className="flex items-center justify-between overflow-hidden whitespace-nowrap rounded-lg border border-gray-300 bg-white text-sm text-gray-700 shadow-sm backdrop-blur">
-          <div className="px-4">
-            {type === "success" && (
-              <CheckCircle size={32} weight="fill" className="text-green-600" />
-            )}
-            {type === "error" && (
-              <XCircle size={32} weight="fill" className="text-red-600" />
-            )}
+          <div className="flex items-center gap-2 overflow-hidden flex-grow">
+            <div className="px-4">
+              {type === "success" && (
+                <CheckCircle
+                  size={32}
+                  weight="fill"
+                  className="text-green-600"
+                />
+              )}
+              {type === "error" && (
+                <XCircle size={32} weight="fill" className="text-red-600" />
+              )}
+            </div>
+            <RadixToast.Description className="truncate">
+              {text}
+            </RadixToast.Description>
           </div>
-          <RadixToast.Description className="truncate pr-4">
-            {text}
-          </RadixToast.Description>
           <RadixToast.Close className="p-4 text-gray-500 transition hover:bg-gray-200/30 hover:text-gray-300 active:text-white">
             <X size={16} />
           </RadixToast.Close>
