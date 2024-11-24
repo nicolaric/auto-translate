@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { commitSession } from "~/lib/sessions/sessions";
 import { requireUserSession } from "~/lib/utils/auth.server";
 import * as gtag from "~/lib/utils/gtag.client";
-import { ChartLineUp, Key, List } from "@phosphor-icons/react";
+import { ChartLineUp, Key, List, Translate } from "@phosphor-icons/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -96,6 +96,19 @@ export default function Account() {
           </div>
           <NavLink
             to={{
+              pathname: "./translator",
+            }}
+            className={({ isActive }) =>
+              `text-gray-700 px-4 py-1 rounded-md whitespace-nowrap flex items-center gap-2 ${
+                isActive ? "bg-white shadow-md" : ""
+              }`
+            }
+          >
+            <Translate size={16} />
+            <span>Translator</span>
+          </NavLink>
+          <NavLink
+            to={{
               pathname: "./api-keys",
             }}
             className={({ isActive }) =>
@@ -132,6 +145,16 @@ export default function Account() {
           </div>
           {mobileMenuOpen && (
             <div className="mt-4">
+              {" "}
+              <NavLink
+                to={{
+                  pathname: "./translator",
+                }}
+                className="flex items-center gap-2 text-gray-700 px-4 py-1 rounded-md whitespace-nowrap w-full"
+              >
+                <Translate size={16} />
+                <span>Translator</span>
+              </NavLink>
               <NavLink
                 to={{
                   pathname: "./api-keys",

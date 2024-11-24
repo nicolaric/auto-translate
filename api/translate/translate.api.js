@@ -2,16 +2,16 @@ import OpenAI from "openai";
 import Stripe from "stripe";
 import { config } from "../config/config.js";
 import { translateRequest } from "../models/translate-request.js";
-import { verifyApiToken } from "../utils/auth/auth.js";
-import { getUser } from "../utils/db/user.db.js";
-import { compareJSON, mergeJSON } from "../utils/json/compareJson.js";
-import { countValueWords } from "../utils/json/count-value-words.js";
-import { chunkJson } from "../utils/json/chunk-json.js";
+import { verifyApiToken, verifyInternalToken } from "../utils/auth/auth.js";
 import {
     getFreeTierSubscription,
     updateFreeTierSubscriptionActive,
     updateFreeTierSubscriptionUsage,
 } from "../utils/db/free-tier-subscription.db.js";
+import { getUser } from "../utils/db/user.db.js";
+import { chunkJson } from "../utils/json/chunk-json.js";
+import { compareJSON, mergeJSON } from "../utils/json/compareJson.js";
+import { countValueWords } from "../utils/json/count-value-words.js";
 import { track } from "../utils/tracking/trackTelegram.js";
 
 const stripe = new Stripe(config("STRIPE_KEY"));
@@ -24,8 +24,14 @@ const openai = new OpenAI({
 export const translateApi = (fastify, _, done) => {
     fastify.post("/", async (request, reply) => {
         track("Translation Request");
+
         const tokenObject = await verifyApiToken(request.headers["api-token"]);
-        const user = getUser(tokenObject.user);
+        const userFromAppToken = await verifyInternalToken(
+            request.headers.authorization,
+        );
+
+        const user = userFromAppToken ?? getUser(tokenObject.user);
+
         const subscription = (
             await stripe.subscriptions.list({
                 customer: user.stripe_id,
