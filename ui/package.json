@@ -14,16 +14,17 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@phosphor-icons/react": "^2.1.7",
+    "@radix-ui/react-toast": "^1.2.2",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
+    "framer-motion": "^11.11.17",
     "google-auth-library": "^9.15.0",
     "i": "^0.3.7",
     "isbot": "^4.1.0",
     "npm": "^10.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

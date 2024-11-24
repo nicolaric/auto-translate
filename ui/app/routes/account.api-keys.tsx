@@ -1,7 +1,9 @@
+import { CircleNotch } from "@phosphor-icons/react";
+import { ToastProvider } from "@radix-ui/react-toast";
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { useToast } from "~/lib/components/toast";
 import { requireUserSession } from "~/lib/utils/auth.server";
 
 export const meta: MetaFunction = () => {
@@ -37,6 +39,8 @@ export const loader = async ({
 };
 
 export default function Account() {
+  const { showToast } = useToast();
+
   const [isCreateKeyDialogOpen, setCreateKeyDialogOpen] = useState(false);
   const [isCopyKeyDialogOpen, setCopyKeyDialogOpen] = useState<
     { open: false } | { open: true; secret: string }
@@ -44,6 +48,7 @@ export default function Account() {
   const [isDeleteKeyDialogOpen, setDeleteKeyDialogOpen] = useState<
     { open: false } | { open: true; id: string }
   >({ open: false });
+  const [isButtonLoading, setButtonLoading] = useState(false);
 
   const openCreateKeyDialog = () => setCreateKeyDialogOpen(true);
   const closeCreateKeyDialog = () => setCreateKeyDialogOpen(false);
@@ -68,6 +73,10 @@ export default function Account() {
   const handleChangeKeyName = (event) => setKeyName(event.target.value);
 
   const handleCreateKey = async () => {
+    if (isButtonLoading) return;
+
+    setButtonLoading(true);
+    showToast("Creating API key...", "success");
     const name = keyName.trim();
     try {
       const newKeyRequest = await fetch(
@@ -86,19 +95,23 @@ export default function Account() {
       openCopyKeyDialog(newKey.token);
       closeCreateKeyDialog();
       setApiKeys([...apiKeys, newKey]);
-      toast.success("Created API key successfully");
+      showToast("Created API key successfully", "success");
     } catch (error) {
       console.error("Error creating API key:", error);
-      toast.error("Error creating API key");
+      showToast("Error creating API key", "error");
+    } finally {
+      setButtonLoading(false);
     }
   };
 
   const handleDeleteKey = async () => {
+    if (isButtonLoading) return;
     try {
+      setButtonLoading(true);
       const deleteKey = isDeleteKeyDialogOpen;
       if (!deleteKey.open) return;
 
-      const deleteReq = await fetch(
+      await fetch(
         `https://auto-translate.com/api/user/api-token/${deleteKey.id}`,
         {
           method: "DELETE",
@@ -108,20 +121,19 @@ export default function Account() {
         }
       );
 
-      await deleteReq.json();
-
       setApiKeys([...apiKeys.filter((ak) => ak.id !== deleteKey.id)]);
       closeDeleteKeyDialog();
-      toast.success("Deleted API key successfully");
+      showToast("Deleted API key successfully", "success");
     } catch (error) {
       console.error("Error deleting API key:", error);
-      toast.error("Error deleting API key");
+      showToast("Error deleting API key", "error");
+    } finally {
+      setButtonLoading(false);
     }
   };
 
   return (
     <div>
-      <Toaster />
       <button
         onClick={openCreateKeyDialog}
         className="bg-blue-600 text-white px-4 py-2 rounded-md mb-4"
@@ -179,7 +191,11 @@ export default function Account() {
                 className="px-4 py-2 bg-blue-600 text-white rounded-md"
                 onClick={handleCreateKey}
               >
-                Submit
+                {!isButtonLoading ? (
+                  "Submit"
+                ) : (
+                  <CircleNotch size={16} className="animate-spin" />
+                )}
               </button>
             </div>
           </div>
@@ -232,7 +248,11 @@ export default function Account() {
                 className="px-4 py-2 bg-red-600 text-white rounded-md"
                 onClick={handleDeleteKey}
               >
-                Delete
+                {!isButtonLoading ? (
+                  "Delete"
+                ) : (
+                  <CircleNotch size={16} className="animate-spin" />
+                )}
               </button>
             </div>
           </div>

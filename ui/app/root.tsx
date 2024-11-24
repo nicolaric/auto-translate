@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import { ToastProvider } from "./lib/components/toast";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -53,7 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             />
           </>
         )}
-        {children}
+        <ToastProvider>{children}</ToastProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
