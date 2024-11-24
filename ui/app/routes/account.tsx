@@ -49,7 +49,8 @@ export const loader = async ({
       }
     );
 
-    await res.json();
+    console.log("iiiiiiiiiiiiiiin", await res.json());
+
     paymentStatus = await loadPaymentStatus();
   }
 

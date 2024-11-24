@@ -113,7 +113,13 @@ export const paymentApi = (fastify, _, done) => {
             return { error: "Unauthorized" };
         }
 
-        if (user.stripe_id) {
+        const subscription = await stripe.subscriptions.list({
+            customer: user.stripe_id,
+            status: "active",
+            limit: 1,
+        });
+
+        if (subscription.data.length > 0) {
             reply.type("application/json").code(400);
             return { error: "User already has an active paid subscription" };
         }
