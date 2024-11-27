@@ -4,6 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { useToast } from "~/lib/components/toast";
 import { requireUserSession } from "~/lib/utils/auth.server";
+import { logEvent } from "~/lib/utils/logs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,6 +18,7 @@ export const loader = async ({
 }: {
   request: Request;
 }): Promise<Response> => {
+  logEvent("api_key_page_viewed", undefined);
   const session = await requireUserSession(request);
   const keysResponse = await fetch(
     "https://auto-translate.com/api/user/api-token",
@@ -75,7 +77,6 @@ export default function Account() {
     if (isButtonLoading) return;
 
     setButtonLoading(true);
-    showToast("Creating API key...", "success");
     const name = keyName.trim();
     try {
       const newKeyRequest = await fetch(
@@ -128,6 +129,15 @@ export default function Account() {
       showToast("Error deleting API key", "error");
     } finally {
       setButtonLoading(false);
+    }
+  };
+
+  const copy = (text: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      showToast("Copied token successfully", "success");
+    } catch {
+      showToast("Couldn't copy text. Please copy manually.", "error");
     }
   };
 
@@ -216,6 +226,12 @@ export default function Account() {
               className="w-full border border-gray-300 rounded-md p-2 mb-4"
               readOnly
             />
+            <button
+              onClick={() => copy(isCopyKeyDialogOpen?.secret)}
+              className="px-2 bg-blue-600 rounded-md text-white"
+            >
+              Copy to clipboard
+            </button>
             <div className="flex justify-end space-x-2">
               <button
                 onClick={closeCopyKeyDialog}

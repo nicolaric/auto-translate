@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { requireUserSession } from "~/lib/utils/auth.server";
+import { logEvent } from "~/lib/utils/logs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,6 +15,7 @@ export const loader = async ({
 }: {
   request: Request;
 }): Promise<Response> => {
+  logEvent("usage_page_viewed", undefined);
   const session = await requireUserSession(request);
 
   const paymentStatusReq = await fetch(
